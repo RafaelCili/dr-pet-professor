@@ -1,0 +1,1809 @@
+<%- include('layouts/header', { tituloDaPagina: 'Dr.Pet | Administrador' , quill: true }) %>
+
+    <!-- transformar navegação em rotas -->
+    <div class="bg-gray-50 min-h-screen">
+        <main class="container px-4 md:px-20 py-10 md:py-[120px] flex flex-col items-center">
+            <nav class="flex items-center justify-center flex-wrap gap-4 sm:gap-6 lg:gap-10 w-full max-w-[1288px]">
+                <button type="button" data-tab-btn data-target="section-slides"
+                    class="flex justify-center items-center px-4 py-3 md:py-4 w-[140px] xs:w-[160px] sm:w-[180px] lg:w-[270px] bg-green-600 rounded-[10px] shadow-[3px_3px_8px_0px_rgba(0,0,0,0.1)] hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-500 transition-all shrink-0">
+                    <span
+                        class="font-sans font-semibold text-lg xs:text-xl lg:text-3xl leading-snug lg:leading-10 text-gray-50">Slides</span>
+                </button>
+
+                <button type="button" data-tab-btn data-target="section-agenda"
+                    class="flex justify-center items-center px-4 py-3 md:py-4 w-[140px] xs:w-[160px] sm:w-[180px] lg:w-[270px] bg-gray-200 rounded-[10px] hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-green-600/50 transition-all shrink-0">
+                    <span
+                        class="font-sans font-semibold text-lg xs:text-xl lg:text-3xl leading-snug lg:leading-10 text-green-700">Agenda</span>
+                </button>
+
+                <button type="button" data-tab-btn data-target="section-servicos"
+                    class="flex justify-center items-center px-4 py-3 md:py-4 w-[140px] xs:w-[160px] sm:w-[180px] lg:w-[270px] bg-gray-200 rounded-[10px] hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-green-600/50 transition-all shrink-0">
+                    <span
+                        class="font-sans font-semibold text-lg xs:text-xl lg:text-3xl leading-snug lg:leading-10 text-green-700">Serviços</span>
+                </button>
+
+                <button type="button" data-tab-btn data-target="section-agendamentos"
+                    class="flex justify-center items-center px-4 py-3 md:py-4 w-[140px] xs:w-[160px] sm:w-[180px] lg:w-[270px] bg-gray-200 rounded-[10px] hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-green-600/50 transition-all shrink-0">
+                    <span
+                        class="font-sans font-semibold text-lg xs:text-xl lg:text-3xl leading-snug lg:leading-10 text-green-700">Solicitações</span>
+                </button>
+
+                <button type="button" data-tab-btn data-target="section-produtos"
+                    class="flex justify-center items-center px-4 py-3 md:py-4 w-[140px] xs:w-[160px] sm:w-[180px] lg:w-[270px] bg-gray-200 rounded-[10px] hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-green-600/50 transition-all shrink-0">
+                    <span
+                        class="font-sans font-semibold text-lg xs:text-xl lg:text-3xl leading-snug lg:leading-10 text-green-700">Produtos</span>
+                </button>
+
+                <button type="button" data-tab-btn data-target="section-relatorios"
+                    class="flex justify-center items-center px-4 py-3 md:py-4 w-[140px] xs:w-[160px] sm:w-[180px] lg:w-[270px] bg-gray-200 rounded-[10px] hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-green-600/50 transition-all shrink-0">
+                    <span
+                        class="font-sans font-semibold text-lg xs:text-xl lg:text-3xl leading-snug lg:leading-10 text-green-700">Relatórios</span>
+                </button>
+            </nav>
+
+            <section id="section-slides" data-tab-content
+                class="animate-fadeLeft opacity-0 w-full max-w-[1400px] mt-10 md:mt-20">
+                <h2
+                    class="font-sans font-bold text-xl md:text-3xl leading-tight md:leading-[40px] text-green-700 whitespace-nowrap">
+                    Slides
+                </h2>
+                <picture data-content-slides
+                    class="mt-5 md:mt-10 flex items-center gap-10 py-5 w-full overflow-x-auto flex-nowrap md:flex-wrap md:overflow-visible">
+                    <% if(slides.length !==0) { %>
+                        <% slides.forEach(slide=> { %>
+                            <figure style="background-image: url('/administrador/slide-home/imagem/<%= slide.id %>');"
+                                aria-label="<%= slide.alt || 'Slide' %>" data-content-slides="<%= slide.id %>"
+                                class="animate-fadeLeft relative w-[280px] h-[148px] rounded-[10px] shrink-0 bg-cover bg-center bg-no-repeat">
+                                <div class="absolute inset-0 bg-black/25 rounded-[10px]"></div>
+
+                                <button type="button" data-id="<%= slide.id %>"
+                                    class="delete-slide-btn absolute -top-[12px] -right-[12px] flex items-center justify-center p-3 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors z-10 shadow-sm cursor-pointer">
+                                    <img src="../images/icons/administrador/delete-slide.svg" alt="Remover slide"
+                                        class="w-5 h-5 pointer-events-none">
+                                </button>
+                            </figure>
+                            <% }) %>
+                                <% } %>
+
+                                    <label type="file" data-add-slide for="button-add-slide-file"
+                                        class="cursor-pointer max-w-[280px] min-w-[200px] h-[148px] w-full flex flex-col items-center justify-center gap-5 px-[30px] py-5 border-2 border-dashed border-gray-400 rounded-[10px] hover:bg-gray-200 transition-colors shrink-0">
+                                        <img src="/images/icons/administrador/plus-slide.svg" alt="Adicionar"
+                                            class="w-10 h-10" />
+                                        <span class="font-sans font-semibold text-[20px] leading-[25px] text-green-600">
+                                            Adicionar Slide
+                                        </span>
+                                        <input type="file" class="hidden overflow-hidden" id="button-add-slide-file" />
+                                    </label>
+                </picture>
+            </section>
+
+            <section id="section-agenda" data-tab-content
+                class="animate-fadeLeft opacity-0 hidden w-full max-w-[1400px] mt-10 md:mt-20">
+                <div class="flex flex-col gap-10 w-full">
+                    <h2
+                        class="font-sans font-bold text-xl md:text-3xl leading-tight md:leading-[40px] text-green-700 whitespace-nowrap">
+                        Agenda
+                    </h2>
+                    <div class="flex flex-wrap items-end gap-10 w-full">
+                        <div class="flex flex-col gap-[15px]">
+                            <label class="font-sans font-semibold text-xl md:text-[26px] leading-[32px] text-gray-700">
+                                Escolha a data
+                            </label>
+                            <div class="relative w-[220px]">
+                                <input type="date" data-input-date="adm" min="2026-01-01"
+                                    class="px-5 py-[10px] w-full border-2 border-green-600 rounded-[5px] shadow-sm font-medium text-lg md:text-[22px] leading-[27px] text-gray-600 outline-none cursor-pointer focus:ring-4 focus:ring-green-600/30 transition-all [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer" />
+                                <img src="/images/icons/administrador/calendar-plus.svg" alt="Calendário"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none" />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-[15px]">
+                            <label class="font-sans font-semibold text-xl md:text-[26px] leading-[32px] text-gray-700">
+                                Escolha o Serviço
+                            </label>
+                            <div class="relative w-[280px]">
+                                <select data-select="service"
+                                    class="px-5 py-[10px] w-full border-2 border-green-600 rounded-[5px] shadow-sm font-medium text-lg md:text-[22px] leading-[27px] text-gray-600 outline-none bg-white cursor-pointer appearance-none focus:ring-4 focus:ring-green-600/30 transition-all">
+                                    <% if (locals.servicos && servicos.length> 0) { %>
+                                        <option value="all" selected>
+                                            Todas as Opções
+                                        </option>
+                                        <% servicos.forEach(servico=> { %>
+                                            <option value="<%= servico.id %>">
+                                                <%= servico.nome %>
+                                            </option>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <option value="" disabled selected>Nenhum Serviço</option>
+                                                    <% } %>
+                                </select>
+                                <img src="/images/icons/arrow-down.svg" alt="Seta"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 pointer-events-none" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div data-content-schedule
+                    class="mt-10 grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(340px,1fr))] gap-[30px] md:gap-[50px] w-full overflow-y-auto max-h-[1000px] scroll pb-2 pr-2">
+                    <p class="animate-fadeItem text-lg font-semibold text-gray-700 text-center col-span-full py-8">
+                        Não há nenhum agendamento para este dia e serviço selecionados.
+                    </p>
+                </div>
+
+            </section>
+
+                        <section id="section-servicos" class="w-full max-w-[1400px] mt-10 md:mt-20">
+                        <div class="flex flex-col gap-6 w-full">
+                    <!-- Cabeçalho da Seção -->
+                        <div class="flex flex-col gap-2">
+                        <h2 class="font-sans font-bold text-xl md:text-3xl leading-tight md:leading-[40px] text-green-700 whitespace-nowrap">
+                            Serviços
+                        </h2>
+                        <p class="font-sans font-medium text-base md:text-lg text-gray-600">
+                            Cadastre, atualize ou remova os serviços oferecidos pela Dr.Pet.
+                        </p>
+                    </div>
+
+                    <!-- Botões para abrir os Modais -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 p-7 md:p-[40px] bg-white rounded-[10px] shadow-sm border-t-[6px] border-green-600">
+                        <button onclick="openModal('modal-criar-servico')" type="button"
+                            class="flex justify-center items-center px-4 py-3 md:py-4 bg-gray-200 rounded-[10px] font-sans font-semibold text-base xs:text-lg md:text-xl text-center text-green-700 hover:bg-green-600 hover:text-white hover:shadow-md transition-all">
+                            + Criar Novo Serviço
+                        </button>
+                        
+                        <button onclick="openModal('modal-atualizar-servico')" type="button"
+                            class="flex justify-center items-center px-4 py-3 md:py-4 bg-gray-200 rounded-[10px] font-sans font-semibold text-base xs:text-lg md:text-xl text-center text-green-700 hover:bg-green-600 hover:text-white hover:shadow-md transition-all">
+                            ✎ Atualizar Serviço
+                        </button>
+                        
+                        <button onclick="openModal('modal-deletar-servico')" type="button"
+                            class="flex justify-center items-center px-4 py-3 md:py-4 bg-gray-200 rounded-[10px] font-sans font-semibold text-base xs:text-lg md:text-xl text-center text-green-700 hover:bg-red-600 hover:text-white hover:shadow-md transition-all">
+                            🗑 Deletar Serviços
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODAL criar -->
+            <div id="modal-criar-servico" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeItem">
+                <div class="bg-white rounded-[10px] shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col">
+                    <div class="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+                        <h3 class="text-2xl font-bold text-green-700">Criar Novo Serviço</h3>
+                        <button onclick="closeModal('modal-criar-servico')" class="text-gray-500 hover:text-red-500 text-2xl font-bold leading-none">&times;</button>
+                    </div>
+                    <div class="p-6">
+                        <!-- Seu Formulário de Criação -->
+                        <form action="/administrador/servicos/criar" method="POST" enctype="multipart/form-data" class="flex flex-col gap-6 w-full">
+                            <div class="flex flex-col md:flex-row flex-wrap gap-6 w-full">
+                                <div class="flex flex-col gap-[10px] flex-1 min-w-[250px]">
+                                    <label for="novo-servico-nome" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Nome do Serviço</label>
+                                    <input type="text" maxlength="16" id="novo-servico-nome" name="nome" placeholder="Ex: Tosa Higiênica" required class="px-5 py-[10px] w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400" />
+                                </div>
+                                <div class="flex flex-col gap-[10px] flex-1 min-w-[180px]">
+                                    <label for="novo-servico-duracao" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Duração (min)</label>
+                                    <input type="text" maxlength="8" id="novo-servico-duracao" name="duracao" placeholder="Ex: 60 min" required class="px-5 py-[10px] w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400" />
+                                </div>
+                                <div class="flex flex-col gap-[10px] flex-1 min-w-[180px]">
+                                    <label for="novo-servico-preco" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Preço (R$)</label>
+                                    <input type="text" maxlength="11" id="novo-servico-preco" name="preco" placeholder="R$ 0,00" required class="px-5 py-[10px] w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400" />
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-[10px]">
+                                <label for="novo-servico-descricao" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Descrição</label>
+                                <textarea id="novo-servico-descricao" name="descricao" maxlength="500" rows="4" required placeholder="Descreva o que está incluso neste serviço..." class="px-5 py-3 w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none resize-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400"></textarea>
+                            </div>
+                            <div class="flex flex-col gap-[10px]">
+                                <span class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Imagem do Serviço</span>
+                                <input type="file" id="novo-servico-imagem" name="imagem" accept="image/*" required class="peer sr-only" />
+                                <label for="novo-servico-imagem" class="cursor-pointer relative flex flex-col items-center justify-center min-h-[140px] px-4 py-6 border-2 border-dashed border-gray-400 rounded-[10px] hover:border-green-500 hover:bg-green-50/50 peer-focus-visible:border-green-500 peer-focus-visible:ring-4 peer-focus-visible:ring-green-600/30 transition-all overflow-hidden group">
+                                    <div data-placeholder="novo-servico" class="flex flex-col items-center justify-center gap-3">
+                                        <img src="/images/icons/administrador/plus-slide.svg" alt="Adicionar imagem" class="w-8 h-8 opacity-60 group-hover:opacity-100 transition-opacity" />
+                                        <span class="font-sans font-medium text-sm md:text-base text-gray-500 text-center">Clique para selecionar a imagem do serviço</span>
+                                    </div>
+                                    <div data-preview-wrapper="novo-servico" class="hidden flex-col items-center justify-center gap-2 w-full animate-fadeItem">
+                                        <div class="relative rounded-[8px] overflow-hidden shadow-sm border border-gray-200 bg-gray-50 max-w-full">
+                                            <img data-preview-img="novo-servico" src="" alt="Preview da imagem" class="max-h-[180px] w-auto max-w-full object-contain mx-auto block" />
+                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs md:text-sm font-semibold p-2 text-center">Clique para trocar a imagem</div>
+                                        </div>
+                                        <span class="text-xs text-gray-500 font-medium">Clique para escolher outra imagem</span>
+                                    </div>
+                                </label>
+                                <div data-info-wrapper="novo-servico" class="hidden flex-row items-center justify-between gap-3 px-1 animate-fadeItem">
+                                    <span data-info="novo-servico-imagem" class="font-sans text-sm font-semibold text-green-600 truncate flex items-center gap-1.5"></span>
+                                    <button type="button" data-remove-img="novo-servico" class="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline shrink-0">Remover</button>
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-4">
+                                <button type="button" onclick="closeModal('modal-criar-servico')" class="px-6 py-[10px] font-semibold text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-[5px] transition-all">Cancelar</button>
+                                <button type="submit" class="flex flex-row items-center justify-center px-8 py-[10px] bg-green-600 rounded-[5px] shadow-sm hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-500 transition-all">
+                                    <span class="font-sans font-semibold text-lg text-white">Cadastrar Serviço</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL atualizacao -->
+            <div id="modal-atualizar-servico" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeItem">
+                <div class="bg-white rounded-[10px] shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col">
+                    <div class="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+                        <h3 class="text-2xl font-bold text-green-700">Atualizar Serviço Existente</h3>
+                        <button onclick="closeModal('modal-atualizar-servico')" class="text-gray-500 hover:text-red-500 text-2xl font-bold leading-none">&times;</button>
+                    </div>
+                    <div class="p-6">
+
+                        <form action="/administrador/servicos/atualizar" method="POST" enctype="multipart/form-data" class="flex flex-col gap-6 w-full">
+                            <div class="flex flex-col md:flex-row flex-wrap gap-6 w-full">
+                                <div class="flex flex-col gap-[10px] flex-1 min-w-[250px]">
+                                    <label for="servico-select" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Escolha o Serviço</label>
+                                    <div class="relative">
+                                        <select id="servico-select" name="servicoId" required class="px-5 py-[10px] w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none bg-white cursor-pointer appearance-none focus:ring-4 focus:ring-green-600/30 transition-all">
+                                            <option value="" disabled selected>Selecione um serviço...</option>
+                                            <% if (locals.servicos && servicos.length > 0) { %>
+                                                <% servicos.forEach(servico => { %>
+                                                    <option value="<%= servico.id %>"><%= servico.nome %></option>
+                                                <% }) %>
+                                            <% } %>
+                                        </select>
+                                        <img src="/images/icons/arrow-down.svg" class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none opacity-70" alt="Seta" />
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-[10px] flex-1 min-w-[180px]">
+                                    <label for="tempo-input" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Nova Duração (min)</label>
+                                    <input type="text" maxlength="8" id="tempo-input" name="duracao" placeholder="Ex: 90 min" required class="px-5 py-[10px] w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400" />
+                                </div>
+                                <div class="flex flex-col gap-[10px] flex-1 min-w-[180px]">
+                                    <label for="preco-input" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Novo Preço (R$)</label>
+                                    <input type="text" maxlength="11" id="preco-input" name="preco" placeholder="R$ 0,00" required class="px-5 py-[10px] w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400" />
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-[10px]">
+                                <label for="atualizar-servico-descricao" class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Nova Descrição</label>
+                                <textarea id="atualizar-servico-descricao" name="descricao" maxlength="500" rows="4" placeholder="Deixe em branco para manter a descrição atual..." class="px-5 py-3 w-full border-2 border-gray-300 focus:border-green-600 rounded-[5px] shadow-sm font-medium text-lg text-gray-600 outline-none resize-none focus:ring-4 focus:ring-green-600/30 transition-all placeholder:text-gray-400"></textarea>
+                            </div>
+                            <div class="flex flex-col gap-[10px]">
+                                <span class="font-sans font-semibold text-lg md:text-[22px] text-gray-700">Nova Imagem do Serviço</span>
+                                <input type="file" id="atualizar-servico-imagem" name="imagem" accept="image/*" class="peer sr-only" />
+                                <label for="atualizar-servico-imagem" class="cursor-pointer relative flex flex-col items-center justify-center min-h-[140px] px-4 py-6 border-2 border-dashed border-gray-400 rounded-[10px] hover:border-green-500 hover:bg-green-50/50 peer-focus-visible:border-green-500 peer-focus-visible:ring-4 peer-focus-visible:ring-green-600/30 transition-all overflow-hidden group">
+                                    <div data-placeholder="atualizar-servico" class="flex flex-col items-center justify-center gap-3">
+                                        <img src="/images/icons/administrador/plus-slide.svg" alt="Adicionar imagem" class="w-8 h-8 opacity-60 group-hover:opacity-100 transition-opacity" />
+                                        <span class="font-sans font-medium text-sm md:text-base text-gray-500 text-center">Clique para trocar a imagem (opcional, mantém a atual se vazio)</span>
+                                    </div>
+                                    <div data-preview-wrapper="atualizar-servico" class="hidden flex-col items-center justify-center gap-2 w-full animate-fadeItem">
+                                        <div class="relative rounded-[8px] overflow-hidden shadow-sm border border-gray-200 bg-gray-50 max-w-full">
+                                            <img data-preview-img="atualizar-servico" src="" alt="Preview da imagem" class="max-h-[180px] w-auto max-w-full object-contain mx-auto block" />
+                                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs md:text-sm font-semibold p-2 text-center">Clique para trocar a imagem</div>
+                                        </div>
+                                        <span class="text-xs text-gray-500 font-medium">Clique para escolher outra imagem</span>
+                                    </div>
+                                </label>
+                                <div data-info-wrapper="atualizar-servico" class="hidden flex-row items-center justify-between gap-3 px-1 animate-fadeItem">
+                                    <span data-info="atualizar-servico-imagem" class="font-sans text-sm font-semibold text-green-600 truncate flex items-center gap-1.5"></span>
+                                    <button type="button" data-remove-img="atualizar-servico" class="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline shrink-0">Remover</button>
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-4 mt-4">
+                                <button type="button" onclick="closeModal('modal-atualizar-servico')" class="px-6 py-[10px] font-semibold text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-[5px] transition-all">Cancelar</button>
+                                <button type="submit" class="flex flex-row items-center justify-center px-8 py-[10px] bg-green-600 rounded-[5px] shadow-sm hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-500 transition-all">
+                                    <span class="font-sans font-semibold text-lg text-white">Atualizar Serviço</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL deletar -->
+            <div id="modal-deletar-servico" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeItem">
+                <!-- Modal mais largo por causa do grid de cards -->
+                <div class="bg-white rounded-[10px] shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto flex flex-col">
+                    <div class="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
+                        <div class="flex flex-col">
+                            <h3 class="text-2xl font-bold text-red-600">Deletar Serviço</h3>
+                            <p class="font-sans font-medium text-sm text-gray-600 mt-1">Clique no ícone vermelho no canto do card para remover um serviço.</p>
+                        </div>
+                        <button onclick="closeModal('modal-deletar-servico')" class="text-gray-500 hover:text-red-500 text-2xl font-bold leading-none">&times;</button>
+                    </div>
+                    <div class="p-6 bg-gray-50">
+                    
+                        <div data-content-services-delete class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+                            <% if (locals.servicos && servicos.length > 0) { %>
+                                <% servicos.forEach(servico => { %>
+                                    <%
+                                        const serviceSlug = (servico.nome || '')
+                                            .toLowerCase()
+                                            .normalize('NFD')
+                                            .replace(/[\u0300-\u036f]/g, '')
+                                            .replace(/\s+e\s+/g, '-')
+                                            .replace(/\s+/g, '-')
+                                            .replace(/[^a-z0-9-]/g, '');
+                                        const serviceDefaultImg = (serviceSlug === 'banho-tosa' || serviceSlug === 'vacinacao' || serviceSlug === 'cirurgia')
+                                            ? `/images/services/${serviceSlug}.png`
+                                            : '/images/services/banho-tosa.png';
+                                    %>
+                                    <article data-service-card class="service-card relative flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md">
+                                        <button type="button" data-button="deleteService"
+                                            data-service-id="<%= servico.id %>"
+                                            data-service-name="<%= servico.nome %>"
+                                            aria-label="Deletar serviço <%= servico.nome %>"
+                                            title="Deletar serviço"
+                                            class="absolute top-3 left-3 z-10 flex items-center justify-center w-10 h-10 bg-white rounded-full shadow-md border border-red-200 hover:bg-red-50 hover:border-red-500 focus:outline-none focus:ring-4 focus:ring-red-500/30 transition-colors group">
+                                            <img src="/images/icons/administrador/delete-slide.svg" alt="" class="w-4 h-4 group-hover:scale-110 transition-transform" />
+                                        </button>
+
+                                        <img src="/servicos/imagem/<%= servico.id %>"
+                                            onerror="this.onerror=null; this.src='<%= serviceDefaultImg %>';"
+                                            alt="<%= servico.nome || 'Serviço' %>"
+                                            class="w-full h-[200px] object-cover" />
+
+                                        <div class="p-5 flex-1 flex flex-col gap-2">
+                                            <h3 class="text-xl font-semibold text-gray-800"><%= servico.nome %></h3>
+                                            <p class="text-sm font-normal leading-snug text-gray-600 line-clamp-3"><%= servico.descricao || 'Descrição do serviço.' %></p>
+                                        </div>
+                                    </article>
+                                <% }) %>
+                            <% } else { %>
+                                <div class="sm:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-12 px-6 text-center bg-white rounded-[15px] border border-gray-200">
+                                    <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-4">
+                                        <img src="/images/icons/calendar_clock_green.svg" alt="" class="w-8 h-8" />
+                                    </div>
+                                    <p class="text-xl md:text-2xl font-medium text-gray-700">Nenhum serviço cadastrado para deletar.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="section-agendamentos" data-tab-content
+                class="animate-fadeLeft opacity-0 hidden w-full max-w-[1400px] mt-10 md:mt-20 flex-col gap-8">
+                
+                <!-- Cabeçalho da Seção com Ação Global -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 w-full">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="w-3.5 h-3.5 rounded-full bg-green-600"></span>
+                            <h2 class="font-sans font-bold text-xl md:text-3xl leading-tight md:leading-[40px] text-green-700">
+                                Solicitações de Agendamento
+                            </h2>
+                        </div>
+                        <p class="font-sans font-medium text-base md:text-lg text-gray-600 max-w-2xl">
+                            Analise as solicitações pendentes e escolha entre aceitar com o 
+                            (<strong class="text-green-700">✔</strong>) 
+                            ou recusar com o (<strong class="text-red-alert">✖</strong>). 
+                            Ao confirmar, um e-mail personalizado com o editor Quill é enviado ao cliente.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Barra de Busca e Filtros de Status -->
+                <div class="my-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 bg-white rounded-[10px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.1)] w-full">
+                    <div class="relative flex-1 min-w-[240px]">
+                        <input data-input="searchAppointments" type="text" maxlength="60"
+                            placeholder="Buscar por cliente, pet, serviço ou e-mail..."
+                            class="w-full pl-10 pr-4 py-2.5 border-2 border-gray-300 rounded-[8px] font-medium text-sm md:text-base text-gray-700 outline-none focus:border-green-600 focus:ring-4 focus:ring-green-600/20 transition-all placeholder:text-gray-400" />
+                        <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Container onde os cards de agendamento são inseridos dinamicamente -->
+                <div data-content-appointment-requests class="flex flex-col gap-5 w-full"
+                    aria-live="polite">
+                    <%
+                        function formatarDataBR(dataVal) {
+                            if (!dataVal) return 'Data não informada';
+                            if (dataVal instanceof Date) {
+                                const d = String(dataVal.getDate()).padStart(2, '0');
+                                const m = String(dataVal.getMonth() + 1).padStart(2, '0');
+                                const y = dataVal.getFullYear();
+                                return `${d}/${m}/${y}`;
+                            }
+                            const str = String(dataVal).split('T')[0];
+                            const partes = str.split('-');
+                            if (partes.length === 3) {
+                                return `${partes[2]}/${partes[1]}/${partes[0]}`;
+                            }
+                            return str;
+                        }
+
+                        function formatarHoraBR(horaVal) {
+                            if (!horaVal) return 'Horário a definir';
+                            const partes = String(horaVal).split(':');
+                            if (partes.length >= 2) {
+                                return `${partes[0]}:${partes[1]}`;
+                            }
+                            return horaVal;
+                        }
+
+                        function formatarTelefoneBR(tel) {
+                            if (!tel) return 'Telefone não informado';
+                            const clean = String(tel).replace(/\D/g, '');
+                            if (clean.length === 11) {
+                                return `(${clean.slice(0, 2)}) ${clean.slice(2, 7)}-${clean.slice(7)}`;
+                            }
+                            if (clean.length === 10) {
+                                return `(${clean.slice(0, 2)}) ${clean.slice(2, 6)}-${clean.slice(6)}`;
+                            }
+                            return tel;
+                        }
+
+                        const listaAgendamentos = (locals.agendamentos && Array.isArray(agendamentos))
+                            ? agendamentos.filter(item => {
+                                const ag = item.agenda || item;
+                                return ag.pendente === true || ag.pendente === 1 || ag.pendente === '1' || ag.pendente === 'true';
+                            })
+                            : [];
+                    %>
+
+                    <% if (listaAgendamentos.length > 0) { %>
+                        <% listaAgendamentos.forEach(item => { 
+                            const ag = item.agenda || item;
+                            const usr = item.usuario || {};
+                            const srv = item.service_infos || item.service || {};
+
+                            const id = ag.id;
+                            const isPending = (ag.pendente === true || ag.pendente === 1 || ag.pendente === '1' || ag.pendente === 'true');
+                            const clientName = ag.nome || usr.nome || 'Cliente não informado';
+                            const email = usr.email || '';
+                            const telefone = ag.telefone || usr.telefone || '';
+                            const petName = ag.nomePet || 'Pet';
+                            const raca = ag.raca || '';
+                            const serviceName = srv.nome || srv.name || item.service_nome || 'Serviço Veterinário';
+                            const dateFormatted = formatarDataBR(ag.dateAgendamento);
+                            const hourFormatted = formatarHoraBR(ag.hourAgendamento);
+                            const hasTranslado = Boolean(ag.buscarResidencia);
+                            const enderecoBusca = ag.endereco || 'Atendimento presencial na clínica';
+                            const observation = ag.observation || '';
+                            const userId = usr.id || ag.fk_user;
+                            const hasAvatar = Boolean(usr.avatar);
+                        %>
+                            <article
+                                data-appointment-card
+                                data-appointment-id="<%= id %>"
+                                data-client-name="<%= clientName %>"
+                                data-email="<%= email %>"
+                                data-phone="<%= telefone %>"
+                                data-pet="<%= petName %>"
+                                data-service="<%= serviceName %>"
+                                data-service-id="<%= srv.id || ag.fk_service || '' %>"
+                                data-date="<%= dateFormatted %>"
+                                data-hour="<%= hourFormatted %>"
+                                data-translado="<%= hasTranslado ? 'true' : 'false' %>"
+                                data-pending="<%= isPending ? 'true' : 'false' %>"
+                                class="animate-fadeItem flex flex-col justify-between gap-5 w-full p-5 sm:p-7 bg-white rounded-[12px] border-l-[6px] <%= isPending ? 'border-orange' : 'border-green-500' %> shadow-[0px_2px_8px_0px_rgba(0,0,0,0.06)] hover:shadow-md transition-all"
+                            >
+                                <!-- Cabeçalho do Card -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+                                    <div class="flex items-center gap-3.5">
+                                        <% if (hasAvatar && userId) { %>
+                                            <img
+                                                src="/avatar/<%= userId %>"
+                                                alt="<%= clientName %>"
+                                                class="w-12 h-12 rounded-full object-cover shrink-0 border border-green-200"
+                                                onerror="this.onerror=null; this.src='/images/icons/options/user-default.svg';"
+                                            />
+                                        <% } else { %>
+                                            <span class="flex items-center justify-center shrink-0 w-12 h-12 rounded-full bg-green-50 text-green-700 border border-green-200 font-sans font-bold text-xl uppercase select-none">
+                                                <%= clientName.charAt(0) %>
+                                            </span>
+                                        <% } %>
+
+                                        <div class="flex flex-col">
+                                            <h3 class="font-sans font-bold text-lg md:text-xl text-gray-800 leading-tight">
+                                                <%= clientName %>
+                                            </h3>
+                                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs md:text-sm text-gray-500 mt-0.5">
+                                                <% if (email) { %>
+                                                    <span class="flex items-center gap-1 font-medium text-gray-600">✉ <%= email %></span>
+                                                <% } %>
+                                                <% if (email && telefone) { %>
+                                                    <span>•</span>
+                                                <% } %>
+                                                <% if (telefone) { %>
+                                                    <span>📞 <%= formatarTelefoneBR(telefone) %></span>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status Badge -->
+                                    <div class="shrink-0" data-status-container="<%= id %>">
+                                        <% if (!isPending) { %>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs md:text-sm font-semibold bg-green-100 text-green-700 border border-green-300">
+                                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                Aceito • E-mail Enviado
+                                            </span>
+                                        <% } else { %>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs md:text-sm font-semibold bg-orange-light text-orange border border-orange/30">
+                                                <span class="w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+                                                Pendente de Avaliação
+                                            </span>
+                                        <% } %>
+                                    </div>
+                                </div>
+
+                                <!-- Corpo com Grid de Informações -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                                    <div class="flex flex-col">
+                                        <span class="text-xs text-gray-400 uppercase font-semibold">Pet & Raça</span>
+                                        <span class="text-gray-800 font-bold flex items-center gap-1.5 mt-0.5">
+                                            <img src="/images/icons/options/pets/dog.svg" alt="Pet" class="w-4 h-4" />
+                                            <%= petName %> <% if (raca) { %><span class="text-xs text-gray-500 font-normal">(<%= raca %>)</span><% } %>
+                                        </span>
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <span class="text-xs text-gray-400 uppercase font-semibold">Serviço</span>
+                                        <span class="text-gray-800 font-semibold mt-0.5"><%= serviceName %></span>
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <span class="text-xs text-gray-400 uppercase font-semibold">Data & Horário</span>
+                                        <span class="text-gray-800 font-bold flex items-center gap-1 mt-0.5">
+                                            <img src="/images/icons/calender/hour.svg" alt="Horário" class="w-4 h-4 opacity-75" />
+                                            <%= dateFormatted %> às <%= hourFormatted %>
+                                        </span>
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <span class="text-xs text-gray-400 uppercase font-semibold">Transporte</span>
+                                        <span class="text-gray-800 font-medium mt-0.5">
+                                            <%= hasTranslado ? '🚐 Buscar na residência' : '🏥 Na clínica' %>
+                                        </span>
+                                    </div>
+
+                                    <% if (hasTranslado) { %>
+                                        <div class="flex flex-col sm:col-span-2 lg:col-span-4 bg-gray-50 p-2.5 rounded-lg border border-gray-200">
+                                            <span class="text-xs text-gray-500 font-semibold">Endereço de Busca:</span>
+                                            <span class="text-gray-700 text-xs sm:text-sm font-medium mt-0.5 flex items-center gap-1">
+                                                <img src="/images/icons/options/endereco/house.svg" class="w-3.5 h-3.5" alt="Casa" />
+                                                <%= enderecoBusca %>
+                                            </span>
+                                        </div>
+                                    <% } %>
+
+                                    <% if (observation) { %>
+                                        <div class="flex flex-col sm:col-span-2 lg:col-span-4 text-xs sm:text-sm">
+                                            <span class="text-xs text-gray-400 uppercase font-semibold">Observações do Cliente:</span>
+                                            <span class="text-gray-700 italic mt-0.5">"<%= observation %>"</span>
+                                        </div>
+                                    <% } %>
+                                </div>
+
+                                <!-- Rodapé com Ações -->
+                                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-gray-100">
+                                    <span class="text-xs text-gray-400 font-medium">
+                                        Solicitação ID: #<%= id %>
+                                    </span>
+
+                                    <div class="flex items-center gap-3 w-full sm:w-auto justify-end" data-actions-container="<%= id %>">
+                                        <% if (!isPending) { %>
+                                            <button
+                                                type="button"
+                                                data-action="renotify"
+                                                data-id="<%= id %>"
+                                                class="text-xs font-semibold text-green-600 hover:text-green-700 hover:underline outline-none cursor-pointer"
+                                            >
+                                                Enviar novo e-mail ao cliente
+                                            </button>
+                                        <% } else { %>
+                                            <!-- Botão Recusar (X) -->
+                                            <button
+                                                type="button"
+                                                data-action="reject"
+                                                data-id="<%= id %>"
+                                                class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 bg-red-alert hover:opacity-90 text-white rounded-lg font-sans font-semibold text-sm shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-red-alert/40 cursor-pointer"
+                                            >
+                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                                <span>Recusar</span>
+                                            </button>
+
+                                            <!-- Botão Aceitar (Confere ✔) -->
+                                            <button
+                                                type="button"
+                                                data-action="accept"
+                                                data-id="<%= id %>"
+                                                class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-sans font-semibold text-sm shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-green-500/40 cursor-pointer"
+                                            >
+                                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span>Aceitar</span>
+                                            </button>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </article>
+                        <% }); %>
+                    <% } else { %>
+                        <div data-appointment-empty class="flex flex-col items-center justify-center p-12 bg-white rounded-[12px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.25)] text-center gap-3 animate-fadeItem">
+                            <img src="/images/icons/calendar_clock_green.svg" alt="Sem agendamentos" class="w-12 h-12" />
+                            <h4 class="font-sans font-bold text-lg text-gray-700">Nenhuma solicitação encontrada</h4>
+                            <p class="font-sans text-sm text-gray-500 max-w-sm">
+                                Não há solicitações de agendamento registradas no momento.
+                            </p>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
+
+            <section id="section-produtos" data-tab-content
+                class="animate-fadeLeft opacity-0 hidden w-full max-w-[1400px] mt-10 md:mt-20">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-5">
+                    <h2
+                        class="font-sans font-bold text-xl md:text-3xl leading-tight md:leading-[40px] text-green-700 whitespace-nowrap">
+                        Gestão de Produtos
+                    </h2>
+                    <button type="button" data-button="addProduct"
+                        class="flex flex-row items-center gap-[10px] md:gap-[30px] px-5 py-3 md:px-[36px] md:py-[16px] bg-green-400 rounded-[15px] hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all shrink-0 shadow-sm">
+                        <img src="/images/icons/administrador/plus-product.svg" alt="Novo produto"
+                            class="w-6 h-6 md:w-[30px] md:h-[30px]" />
+                        <span class="font-sans font-semibold text-lg md:text-2xl uppercase text-gray-50">
+                            Novo produto
+                        </span>
+                    </button>
+                </div>
+
+                <div
+                    class="mt-5 md:mt-10 flex flex-col p-7 md:p-[60px] bg-white rounded-[10px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.25)] gap-10 md:gap-[60px] w-full overflow-hidden">
+                    <div
+                        class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-3 xl:gap-10 w-full">
+                        <div
+                            class="relative flex flex-row justify-between items-center px-4 py-2 md:px-[36px] md:py-[12px] bg-white border-4 border-gray-300 focus-within:border-green-400 focus-within:ring-4 focus-within:ring-green-400/20 transition-all rounded-[10px] w-full flex-1">
+                            <input data-input="filterProduct" type="text" maxlength="50" placeholder="Busca por nome..."
+                                class="bg-transparent w-full outline-none font-medium text-base md:text-2xl text-gray-500 placeholder:text-gray-500" />
+                            <img src="/images/icons/search.svg" alt="Buscar" class="w-6 h-6 md:w-[32px] md:h-[33px]" />
+                        </div>
+
+                        <div class="relative shrink-0 min-w-fit md:min-w-[400px] w-full md:w-auto">
+                            <select data-select="typeProduct"
+                                class="w-full pl-8 pr-8 xs:pr-20 py-3 md:py-[18px] bg-gray-100 focus:bg-white focus:outline-none focus:ring-4 focus:ring-green-400/50 transition-all rounded-[10px] font-semibold text-sm xs:text-base md:text-2xl uppercase text-gray-700 cursor-pointer appearance-none">
+                                <option value="all" selected>
+                                    Todas as Categorias
+                                </option>
+                                <option value="ração">Ração</option>
+                                <option value="brinquedos">
+                                    Brinquedos
+                                </option>
+                                <option value="medicamentos">
+                                    Medicamentos
+                                </option>
+                                <option value="acessórios">
+                                    Acessórios
+                                </option>
+                                <option value="higiene">Higiene</option>
+                            </select>
+                            <img src="/images/icons/arrow-down.svg" alt="Seta para baixo"
+                                class="hidden xs:block absolute right-5 top-1/2 -translate-y-1/2 w-10 pointer-events-none" />
+                        </div>
+                    </div>
+
+                    <div class="scroll w-full overflow-x-auto pb-1">
+                        <table
+                            class="table-caption w-full min-w-[1200px] xl:min-w-[1400px] text-left border-collapse [&_th]:px-4 lg:[&_th]:px-6 [&_td]:px-4 lg:[&_td]:px-6">
+                            <thead>
+                                <tr
+                                    class="border-b-[3px] border-gray-100 *:pb-5 *:font-semibold *:text-sm *:md:text-lg *:lg:text-xl *:leading-[32px] *:text-gray-700 *:whitespace-nowrap">
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Preço (R$)</th>
+                                    <th>Descrição Longa</th>
+                                    <th>Descrição Curta</th>
+                                    <th class="text-center">Editar</th>
+                                    <th class="text-center">Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody data-content-products="table">
+                                <% if (!locals.produtos || produtos.length===0) { %>
+                                    <tr>
+                                        <td colspan="7"
+                                            class="min-w-[1200px] xl:min-w-[1400px] text-center p-6 text-gray-500 font-medium text-lg">
+                                            Nenhum produto encontrado.</td>
+                                    </tr>
+                                    <% } else { %>
+                                        <% produtos.forEach(produto=> { %>
+                                            <tr data-id="<%= produto.id %>"
+                                                data-name="<%= produto.nome %>"
+                                                data-category="<%= produto.categoria %>"
+                                                data-price="<%= produto.preco %>"
+                                                data-short-description="<%= produto.short_description || '' %>"
+                                                data-long-description="<%- (produto.long_description || '').replace(/"/g, '&quot;') %>"
+                                                class="animate-fadeItem border-b-[3px] border-gray-100 *:text-lg *:leading-[32px] *:text-gray-700 transition-colors">
+                                                <td class="max-w-0 truncate w-[20%]">
+                                                    <%= produto.nome %>
+                                                </td>
+                                                <td class="capitalize">
+                                                    <%= produto.categoria %>
+                                                </td>
+                                                <td class="whitespace-nowrap font-medium text-green-700">
+                                                    <%= "R$ " + Number(produto.preco || 0).toFixed(2).replace('.', ',') %>
+                                                </td>
+                                                <td class="w-[25%] max-w-[240px] xl:max-w-[320px]">
+                                                    <div class="truncate" title="<%= (produto.long_description || '').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim() %>">
+                                                        <%= (produto.long_description || '').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim() %>
+                                                    </div>
+                                                </td>
+                                                <td class="w-[25%] max-w-[200px] xl:max-w-[260px]">
+                                                    <div class="truncate" title="<%= produto.short_description || '' %>">
+                                                        <%= produto.short_description || '' %>
+                                                    </div>
+                                                </td>
+                                                <td class="py-5 text-center">
+                                                    <button type="button" data-button="editProduct"
+                                                        class="hover:opacity-80 transition-opacity mx-auto flex cursor-pointer">
+                                                        <img src="../images/icons/administrador/edit-blue.svg"
+                                                            alt="Editar" class="w-6 h-6 md:w-[35px] md:h-[38px]">
+                                                    </button>
+                                                </td>
+                                                <td class="py-5 text-center">
+                                                    <button type="button" data-button="deleteProduct"
+                                                        class="p-4 hover:opacity-80 transition-opacity mx-auto flex cursor-pointer">
+                                                        <img src="../images/icons/administrador/delete-product.svg"
+                                                            alt="Excluir" class="w-6 h-6 md:w-[37px] md:h-[38px]">
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                        <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-relatorios" data-tab-content
+                class="animate-fadeLeft opacity-0 hidden w-full max-w-[1400px] mt-10 md:mt-20">
+                <!-- Abas dos relatórios -->
+                <nav data-report-nav role="tablist" aria-label="Tipos de relatório" class="w-full flex flex-wrap items-center gap-3 mb-8">
+                    <button type="button" role="tab" aria-selected="true" data-report-tab="usuarios"
+                        class="px-5 py-2.5 rounded-[10px] font-sans font-semibold text-base md:text-lg bg-green-600 text-gray-50 hover:bg-green-700 transition-colors outline-none focus:ring-4 focus:ring-green-300">Usuários</button>
+                    <button type="button" role="tab" aria-selected="false" data-report-tab="produtos"
+                        class="px-5 py-2.5 rounded-[10px] font-sans font-semibold text-base md:text-lg bg-gray-200 text-green-700 hover:bg-gray-300 transition-colors outline-none focus:ring-4 focus:ring-green-300">Produtos</button>
+                    <button type="button" role="tab" aria-selected="false" data-report-tab="servicos"
+                        class="px-5 py-2.5 rounded-[10px] font-sans font-semibold text-base md:text-lg bg-gray-200 text-green-700 hover:bg-gray-300 transition-colors outline-none focus:ring-4 focus:ring-green-300">Serviços</button>
+                </nav>
+
+                <div data-report-panel="usuarios" role="tabpanel">
+
+                <div class="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <h2 class="font-sans font-bold text-2xl md:text-3xl text-gray-900 whitespace-nowrap">
+                        Gestão de Usuários
+                    </h2>
+
+                    <div
+                        class="relative flex items-center w-full bg-white border border-gray-300 rounded-[8px] px-3.5 py-2 focus-within:border-green-600 focus-within:ring-2 focus-within:ring-green-600/20 transition-all shadow-xs">
+                        <svg class="w-4 h-4 text-gray-400 mr-2.5 shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input data-input="searchUsers" type="text" maxlength="50" placeholder="Pesquisar usuários..."
+                            class="w-full bg-transparent outline-none font-sans text-sm md:text-base text-gray-700 placeholder:text-gray-400" />
+                    </div>
+                </div>
+
+                <div class="mt-4 w-full bg-white rounded-[12px] border border-gray-300 overflow-hidden shadow-sm">
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[700px] animate-fadeLeft">
+                            <thead>
+                                <tr class="border-b border-gray-300 bg-white">
+                                    <th
+                                        class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900 w-[90px] text-center">
+                                        Foto</th>
+                                    <th class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Nome
+                                        Completo</th>
+                                    <th class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">
+                                        E-mail</th>
+                                    <th class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">
+                                        Telefone</th>
+                                </tr>
+                            </thead>
+                            <tbody data-content-users="table">
+                                <% if (locals.usuarios && usuarios.length > 0) { %>
+                                    <% usuarios.slice(0, 10).forEach((user, index) => { %>
+                                        <% 
+                                            const cleanPhone = String(user.telefone || '').replace(/\D/g, '');
+                                            const formattedPhone = cleanPhone.length === 11 ? `(${cleanPhone.slice(0, 2)}) ${cleanPhone.slice(2, 7)}-${cleanPhone.slice(7)}` : (cleanPhone.length === 10 ? `(${cleanPhone.slice(0, 2)}) ${cleanPhone.slice(2, 6)}-${cleanPhone.slice(6)}` : user.telefone);
+                                        %>
+                                        <tr class="<%= index % 2 === 1 ? 'bg-row-zebra' : 'bg-white' %> hover:opacity-90 transition-colors"
+                                            style="<%= index % 2 === 1 ? 'background-color: #E2EAE4;' : '' %>">
+                                            <td class="py-3 px-6 text-center w-[90px]">
+                                                <img src="<%= user.has_avatar ? `/avatar/${user.id}` : '/images/icons/options/user-default.svg' %>"
+                                                    alt="<%= user.nome %>"
+                                                    class="w-10 h-10 md:w-11 md:h-11 rounded-full object-cover mx-auto"
+                                                    onerror="this.src='/images/icons/options/user-default.svg';" />
+                                            </td>
+                                            <td class="py-3 px-6 font-medium text-gray-900 text-base md:text-lg">
+                                                <%= user.nome %>
+                                            </td>
+                                            <td class="py-3 px-6 text-gray-800 text-base md:text-lg">
+                                                <%= user.email %>
+                                            </td>
+                                            <td class="py-3 px-6 text-gray-800 text-base md:text-lg whitespace-nowrap">
+                                                <%= formattedPhone %>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4"
+                                            class="text-center py-10 text-gray-500 font-medium text-base">
+                                            Carregando usuários...
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div data-pagination="users" class="<%= (locals.usuarios && usuarios.length > 10) ? 'flex' : 'hidden' %> items-center justify-center gap-1.5 mt-5 mb-2">
+                    <button type="button" data-action="prev"
+                        class="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed">Anterior</button>
+                    <button type="button" data-page="1"
+                        class="px-3 py-1 text-sm font-semibold text-white bg-green-700 rounded transition-all">1</button>
+                    <button type="button" data-action="next"
+                        class="px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed">Próximo</button>
+                </div>
+                </div>
+
+                <!-- ============ Relatório de Produtos ============ -->
+                <div data-report-panel="produtos" role="tabpanel" class="hidden">
+                    <div class="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <h2 class="font-sans font-bold text-2xl md:text-3xl text-gray-900 whitespace-nowrap">
+                            Relatório de Produtos
+                        </h2>
+
+                        <div
+                            class="relative flex items-center w-full bg-white border border-gray-300 rounded-[8px] px-3.5 py-2 focus-within:border-green-600 focus-within:ring-2 focus-within:ring-green-600/20 transition-all shadow-xs">
+                            <svg class="w-4 h-4 text-gray-400 mr-2.5 shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <input data-input="searchReportProdutos" type="text" maxlength="50" placeholder="Pesquisar produtos..."
+                                class="w-full bg-transparent outline-none font-sans text-sm md:text-base text-gray-700 placeholder:text-gray-400" />
+                        </div>
+
+                        <select data-input="reportProdutoCategoria" aria-label="Filtrar por categoria"
+                            class="w-full sm:w-auto sm:min-w-[220px] bg-white border border-gray-300 rounded-[8px] px-3.5 py-2.5 font-sans text-sm md:text-base text-gray-700 outline-none focus:border-green-600 focus:ring-2 focus:ring-green-600/20 transition-all shadow-xs">
+                            <option value="">Todas as categorias</option>
+                            <option value="Ração">Ração</option>
+                            <option value="Brinquedos">Brinquedos</option>
+                            <option value="Medicamentos">Medicamentos</option>
+                            <option value="Acessórios">Acessórios</option>
+                            <option value="Higiene">Higiene</option>
+                        </select>
+                    </div>
+
+                    <p data-report-summary="produtos" class="mt-4 font-sans text-sm md:text-base text-gray-600"></p>
+
+                    <div class="mt-4 w-full bg-white rounded-[12px] border border-gray-300 overflow-hidden shadow-sm">
+                        <div class="w-full overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[760px] animate-fadeLeft">
+                                <thead>
+                                    <tr class="border-b border-gray-300 bg-white">
+                                        <th class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900 w-[90px] text-center">Foto</th>
+                                        <th data-sort="nome" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Produto</th>
+                                        <th data-sort="categoria" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Categoria</th>
+                                        <th data-sort="preco" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Preço</th>
+                                        <th data-sort="descricao" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-content-report="produtos">
+                                    <tr><td colspan="5" class="text-center py-10 text-gray-500 font-medium text-base">Carregando produtos...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div data-pagination="report-produtos" class="hidden items-center justify-center gap-1.5 mt-5 mb-2"></div>
+                </div>
+
+                <!-- ============ Relatório de Serviços (tipos) ============ -->
+                <div data-report-panel="servicos" role="tabpanel" class="hidden">
+                    <div class="w-full flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                        <h2 class="font-sans font-bold text-2xl md:text-3xl text-gray-900 whitespace-nowrap">
+                            Relatório de Serviços
+                        </h2>
+
+                        <div
+                            class="relative flex items-center w-full bg-white border border-gray-300 rounded-[8px] px-3.5 py-2 focus-within:border-green-600 focus-within:ring-2 focus-within:ring-green-600/20 transition-all shadow-xs">
+                            <svg class="w-4 h-4 text-gray-400 mr-2.5 shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <input data-input="searchReportServicos" type="text" maxlength="50" placeholder="Pesquisar serviços..."
+                                class="w-full bg-transparent outline-none font-sans text-sm md:text-base text-gray-700 placeholder:text-gray-400" />
+                        </div>
+                    </div>
+
+                    <p data-report-summary="servicos" class="mt-4 font-sans text-sm md:text-base text-gray-600"></p>
+
+                    <div class="mt-4 w-full bg-white rounded-[12px] border border-gray-300 overflow-hidden shadow-sm">
+                        <div class="w-full overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[700px] animate-fadeLeft">
+                                <thead>
+                                    <tr class="border-b border-gray-300 bg-white">
+                                        <th class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900 w-[90px] text-center">Foto</th>
+                                        <th data-sort="nome" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Serviço</th>
+                                        <th data-sort="duracao" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Duração</th>
+                                        <th data-sort="preco" class="py-3.5 px-6 font-sans font-bold text-base md:text-lg text-gray-900">Preço</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-content-report="servicos">
+                                    <tr><td colspan="4" class="text-center py-10 text-gray-500 font-medium text-base">Carregando serviços...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div data-pagination="report-servicos" class="hidden items-center justify-center gap-1.5 mt-5 mb-2"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- form add product -->
+    <div data-modal="addProduct"
+        class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 animate-fadeItem">
+        <div
+            class="relative w-[95%] max-w-[720px] rounded-[15px] overflow-hidden shadow-[0px_4px_20px_0px_rgba(0,0,0,0.15)]">
+            <form data-form="addProduct"
+                class="relative max-h-[90vh] overflow-y-auto scroll bg-white p-6 md:p-10 flex flex-col gap-6 md:gap-8">
+                <button type="button" data-button="closeFormProduct"
+                    class="absolute top-4 right-4 md:top-6 md:right-6 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition-colors text-xl font-bold leading-none">
+                    <img src="/images/icons/administrador/delete-slide.svg" alt="Fechar Formulário" />
+                </button>
+
+                <h3 class="font-sans font-bold text-xl md:text-2xl text-green-600 pr-10">
+                    Adicionar Novo Produto
+                </h3>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="input-product-name"
+                        class="font-sans font-semibold text-base md:text-lg text-gray-700">Nome do Produto</label>
+                    <input data-input="product-name" id="input-product-name" type="text" name="name"
+                        placeholder="Ex: Ração Golden Cães Adultos" maxlength="35" required
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="flex flex-col gap-[10px] flex-1">
+                        <label for="select-product-category"
+                            class="font-sans font-semibold text-base md:text-lg text-gray-700">Categoria</label>
+                        <div class="relative">
+                           <select data-select-new="productCategory" id="select-product-category" name="categoria" required
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600">
+                                <option value="" disabled selected>Selecione uma categoria</option>
+                                <option value="Ração">Ração</option>
+                                <option value="Brinquedos">Brinquedos</option>
+                                <option value="Medicamentos">Medicamentos</option>
+                                <option value="Acessórios">Acessórios</option>
+                                <option value="Higiene">Higiene</option>
+                            </select>
+                            <img src="/images/icons/arrow-down.svg" alt="Seta para baixo"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none" />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-[10px] sm:w-[200px]">
+                        <label for="input-product-price"
+                            class="font-sans font-semibold text-base md:text-lg text-gray-700">Preço (R$)</label>
+                        <input data-input="priceProduct" id="input-product-price" type="text" name="price" min="0"
+                            step="0.01" placeholder="R$ 0,00" maxlength="11" required
+                            class="appearance-none px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="textarea-short-description"
+                        class="font-sans font-semibold text-base md:text-lg text-gray-700">Descrição Curta</label>
+                    <textarea data-textarea="shortDescription" id="textarea-short-description" name="shortDescription"
+                        maxlength="80" placeholder="Digite a descrição curta do produto..."
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none resize-none min-h-[70px] focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400"
+                        required></textarea>
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="textarea-long-description"
+                        class="font-sans font-semibold text-base md:text-lg text-gray-700">Descrição Longa</label>
+                    <div
+                        class="quill-wrapper rounded-lg border-2 border-gray-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/20 transition-all bg-white overflow-hidden">
+                        <div data-quill-editor="longDescription" class="min-h-[120px]"></div>
+                    </div>
+                    <textarea data-textarea="longDescription" id="textarea-long-description" name="longDescription"
+                        class="hidden"></textarea>
+                    <p class="font-sans text-xs md:text-sm text-gray-500">
+                        • Use os controles de formatação para títulos, negrito, listas e links no editor de texto.
+                    </p>
+                </div>
+
+                <!-- Imagem Principal -->
+                <div class="flex flex-col gap-[10px]" data-image-box="product-main-image">
+                    <p class="font-sans font-semibold text-base md:text-lg text-gray-700">Imagem Principal</p>
+                    <label for="input-main-image"
+                        class="cursor-pointer relative flex flex-col items-center justify-center min-h-[140px] px-4 py-6 border-2 border-dashed border-gray-400 rounded-[10px] hover:border-green-500 hover:bg-green-50/50 transition-all overflow-hidden group">
+                        
+                        <!-- Estado Inicial: Sem imagem -->
+                        <div data-placeholder="product-main-image" class="flex flex-col items-center justify-center gap-3">
+                            <img src="/images/icons/administrador/plus-slide.svg" alt="Adicionar imagem"
+                                class="w-8 h-8 opacity-60 group-hover:opacity-100 transition-opacity" />
+                            <span class="font-sans font-medium text-sm md:text-base text-gray-500 text-center">
+                                Clique para selecionar a imagem principal
+                            </span>
+                        </div>
+
+                        <!-- Estado com Preview: Imagem selecionada -->
+                        <div data-preview-wrapper="product-main-image" class="hidden flex-col items-center justify-center gap-2 w-full animate-fadeItem">
+                            <div class="relative rounded-[8px] overflow-hidden shadow-sm border border-gray-200 bg-gray-50 max-w-full">
+                                <img data-preview-img="product-main-image" src="" alt="Preview da imagem principal"
+                                    class="max-h-[180px] w-auto max-w-full object-contain mx-auto block" />
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs md:text-sm font-semibold p-2 text-center">
+                                    Clique para trocar a imagem
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500 font-medium">Clique para escolher outra imagem</span>
+                        </div>
+                    </label>
+                    <input data-input="imageMainProduct" id="input-main-image" type="file" name="mainImage"
+                        accept="image/*" class="peer sr-only" />
+
+                    <!-- Confere com o nome do arquivo (estilo Adicionar Produto) e opção de remover -->
+                    <div data-info-wrapper="product-main-image" class="hidden flex-row items-center justify-between gap-3 px-1 animate-fadeItem">
+                        <span data-info="mainImage" class="font-sans text-sm font-semibold text-green-600 truncate flex items-center gap-1.5"></span>
+                        <button type="button" data-remove-img="product-main-image"
+                            class="text-xs font-semibold text-red-500 hover:text-red-700 hover:underline shrink-0">
+                            Remover
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Imagens do Slide (Galeria Reordenável Visualmente) -->
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center justify-between">
+                        <p class="font-sans font-semibold text-base md:text-lg text-gray-700">Imagens do Slide</p>
+                        <span data-slide-count-badge class="text-xs font-semibold px-2.5 py-1 bg-green-100 text-green-800 rounded-full hidden">
+                            0 slides
+                        </span>
+                    </div>
+
+                    <!-- Botão/Área para adicionar imagens ao slide -->
+                    <label for="input-slide-images"
+                        class="cursor-pointer flex flex-col items-center justify-center gap-2 px-4 py-5 border-2 border-dashed border-gray-400 rounded-[10px] hover:border-green-500 hover:bg-green-50/50 transition-all group">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            <img src="/images/icons/administrador/plus-slide.svg" alt="Adicionar imagens"
+                                class="w-6 h-6 opacity-60 group-hover:opacity-100 transition-opacity" />
+                            <span class="font-sans font-medium text-sm md:text-base text-gray-600 group-hover:text-green-700 transition-colors">
+                                Clique ou arraste para adicionar fotos ao slide
+                            </span>
+                        </div>
+                        <span class="font-sans text-xs text-gray-400">
+                            Selecione uma ou mais fotos (mantenha Ctrl ou Shift para escolher várias de uma vez)
+                        </span>
+                    </label>
+                    <input data-input="imageSlideProduct" id="input-slide-images" type="file" name="slideImages"
+                        accept="image/*" multiple class="peer sr-only" />
+
+                    <!-- Galeria Interativa com Reordenação -->
+                    <div class="flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs md:text-sm font-semibold text-gray-600 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                                </svg>
+                                Ordem de exibição dos slides (use as setas ou arraste para mudar a ordem):
+                            </span>
+                            <span data-info="slideImages" class="font-sans text-xs font-semibold text-green-600 truncate hidden"></span>
+                        </div>
+
+                        <!-- Lista visual de slides horizontal/scroll -->
+                        <div data-slide-gallery
+                            class="min-h-[140px] p-3 rounded-[10px] bg-gray-50 border border-gray-200 flex flex-row flex-wrap sm:flex-nowrap sm:overflow-x-auto gap-3 items-center scroll">
+                            <p data-slide-empty class="text-sm text-gray-400 mx-auto text-center py-4">
+                                Nenhum slide adicionado ainda. Adicione fotos acima para montar o slide do produto.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button data-button="createProduct" type="button"
+                    class="mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 bg-green-600 rounded-[10px] shadow-sm hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-500 transition-all">
+                    <span class="font-sans font-semibold text-lg md:text-xl text-white uppercase">Cadastrar
+                        Produto</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Edição de Agendamento -->
+    <aside data-modal="editSchedule"
+        class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 animate-fadeTop">
+        <div
+            class="relative w-[95%] max-w-[720px] rounded-[15px] overflow-hidden shadow-[0px_4px_20px_0px_rgba(0,0,0,0.15)]">
+            <form data-form="editSchedule"
+                class="relative max-h-[95vh] overflow-y-auto scroll bg-white p-6 md:p-10 flex flex-col gap-6 md:gap-8">
+                <button type="button" data-button="closeFormEditSchedule"
+                    class="absolute top-4 right-4 md:top-6 md:right-6 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition-colors text-xl font-bold leading-none">
+                    <img src="/images/icons/administrador/delete-slide.svg" alt="Fechar Formulário" />
+                </button>
+
+                <!-- Overlay de Loading na Edição -->
+                <div data-loading-edit
+                    class="hidden absolute inset-0 z-50 bg-white/95 backdrop-blur-xs flex-col items-center justify-center gap-4 transition-all">
+                    <div class="relative flex items-center justify-center">
+                        <svg class="w-14 h-14 text-green-600 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#bbf7d0" stroke-width="4"></circle>
+                            <path class="opacity-90" fill="#16a34a" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <span class="font-sans font-bold text-lg text-gray-800">Salvando alterações...</span>
+                        <span class="font-sans text-sm text-gray-500">Atualizando agendamento, enviando e-mail e preparando WhatsApp</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1 pr-10">
+                    <h3 class="font-sans font-bold text-xl md:text-2xl text-green-700 mt-1">
+                        Editar Agendamento e Notificar Cliente
+                    </h3>
+                    <p class="font-sans text-xs md:text-sm text-gray-500">
+                        Os dados antigos são carregados abaixo para você editar apenas o necessário. O cliente será notificado por e-mail e WhatsApp sobre as alterações.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="input-edit-nome" class="font-sans font-semibold text-base md:text-lg text-gray-700">Nome
+                        do Dono</label>
+                    <input data-input="editScheduleName" id="input-edit-nome" type="text" name="nome"
+                        placeholder="Nome completo" required minlength="3" maxlength="50"
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="select-edit-servico"
+                        class="font-sans font-semibold text-base md:text-lg text-gray-700">Serviço Solicitado</label>
+                    <div class="relative w-full">
+                        <select id="select-edit-servico" name="servico" required
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none bg-white appearance-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all cursor-pointer">
+                            <option value="" disabled selected>Selecione um serviço...</option>
+                            <% if (locals.servicos && servicos.length > 0) { %>
+                                <% servicos.forEach(servico => { %>
+                                    <option value="<%= servico.id %>">
+                                        <%= servico.nome %>
+                                    </option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                        <img src="/images/icons/arrow-down.svg" alt="Seta"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none opacity-60" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="flex flex-col gap-[10px] flex-1">
+                        <label for="input-edit-telefone"
+                            class="font-sans font-semibold text-base md:text-lg text-gray-700">Telefone / WhatsApp</label>
+                        <input data-input="formatPhone" id="input-edit-telefone" type="tel" name="telefone"
+                            placeholder="(00) 00000-0000" required minlength="14" maxlength="15"
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+
+                    <div class="flex flex-col gap-[10px] flex-1">
+                        <label for="input-edit-nome-pet"
+                            class="font-sans font-semibold text-base md:text-lg text-gray-700">Nome do Pet</label>
+                        <input data-input="editSchedulePetName" id="input-edit-nome-pet" type="text" name="nomePet"
+                            placeholder="Nome do pet" required minlength="2" maxlength="40"
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="input-edit-data" class="font-sans font-semibold text-base md:text-lg text-gray-700">Data
+                        do Agendamento</label>
+                    <div class="relative w-full">
+                        <input type="date" id="input-edit-data" name="data" required
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full" />
+                        <img src="/images/icons/administrador/calendar-plus.svg" alt="Calendário"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none" />
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-[10px] w-full">
+                    <h3 class="font-sans font-semibold text-base md:text-lg text-gray-700">Horários Disponíveis: <span
+                            data-schedule-time="edit-agenda"
+                            class="font-medium text-green-600 transition-colors duration-200"></span></h3>
+                    <div class="w-full flex flex-col gap-4">
+                        <div class="flex flex-col gap-2">
+                            <h4 class="text-sm font-medium text-green-500">Manhã</h4>
+                            <div data-content="edit-hours-morning" class="flex flex-row flex-wrap items-center gap-2">
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h4 class="text-sm font-medium text-green-500">Tarde</h4>
+                            <div data-content="edit-hours-afternoon" class="flex flex-row flex-wrap items-center gap-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3" data-edit-address>
+                    <span class="font-sans font-semibold text-base md:text-lg text-gray-700">Endereço</span>
+
+                    <p data-edit-address-legacy class="hidden text-sm md:text-base bg-orange-light text-orange rounded-lg px-4 py-3">
+                        Este agendamento tem um endereço em texto livre: <strong data-edit-address-legacy-text></strong><br />
+                        Preencha os campos abaixo para organizar o endereço ou deixe todos em branco para mantê-lo como está.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-x-4 gap-y-4">
+                        <div class="flex flex-col gap-1.5 sm:col-span-4">
+                            <label for="input-edit-cep" class="font-sans font-medium text-sm md:text-base text-gray-600">CEP</label>
+                            <input id="input-edit-cep" type="text" name="cep" data-address="cep" inputmode="numeric" maxlength="9"
+                                placeholder="00000-000"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                        </div>
+
+                        <p data-address-status role="status" aria-live="polite"
+                            class="sm:col-span-8 sm:self-end text-sm text-gray-600 min-h-[1.5rem]"></p>
+
+                        <div class="flex flex-col gap-1.5 sm:col-span-12">
+                            <label for="input-edit-rua" class="font-sans font-medium text-sm md:text-base text-gray-600">Rua</label>
+                            <input id="input-edit-rua" type="text" name="rua" data-address="rua" maxlength="70"
+                                placeholder="Nome da rua"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                        </div>
+
+                        <div class="flex flex-col gap-1.5 sm:col-span-4">
+                            <label for="input-edit-numero" class="font-sans font-medium text-sm md:text-base text-gray-600">Número</label>
+                            <input id="input-edit-numero" type="text" name="numero" data-address="numero" maxlength="10"
+                                placeholder="Ex: 100 ou S/N"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                        </div>
+
+                        <div class="flex flex-col gap-1.5 sm:col-span-8">
+                            <label for="input-edit-bairro" class="font-sans font-medium text-sm md:text-base text-gray-600">Bairro</label>
+                            <input id="input-edit-bairro" type="text" name="bairro" data-address="bairro" maxlength="40"
+                                placeholder="Nome do bairro"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                        </div>
+
+                        <div class="flex flex-col gap-1.5 sm:col-span-8">
+                            <label for="input-edit-cidade" class="font-sans font-medium text-sm md:text-base text-gray-600">Cidade</label>
+                            <input id="input-edit-cidade" type="text" name="cidade" data-address="cidade" maxlength="40"
+                                placeholder="Nome da cidade"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                        </div>
+
+                        <div class="flex flex-col gap-1.5 sm:col-span-4">
+                            <label for="input-edit-estado" class="font-sans font-medium text-sm md:text-base text-gray-600">Estado</label>
+                            <input id="input-edit-estado" type="text" name="estado" data-address="estado" maxlength="2"
+                                placeholder="UF"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 uppercase outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400 placeholder:normal-case" />
+                        </div>
+
+                        <div class="flex flex-col gap-1.5 sm:col-span-12">
+                            <label for="input-edit-complemento" class="font-sans font-medium text-sm md:text-base text-gray-600">
+                                Complemento <span class="text-gray-400 font-normal">(opcional)</span>
+                            </label>
+                            <input id="input-edit-complemento" type="text" name="complemento" data-address="complemento" maxlength="40"
+                                placeholder="Ex: apto 12, na frente da pracinha"
+                                class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="textarea-edit-descricao"
+                        class="font-sans font-semibold text-base md:text-lg text-gray-700">Descrição do Serviço</label>
+                    <textarea data-textarea="editScheduleDesc" id="textarea-edit-descricao" name="descricao"
+                        placeholder="Especificações sobre o serviço..." maxlength="200"
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none resize-none min-h-[120px] focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400"></textarea>
+                </div>
+
+                <div class="flex flex-row items-center gap-[10px] mt-2">
+                    <input data-checkbox="editScheduleTransport" type="checkbox" id="checkbox-edit-buscar"
+                        name="buscarResidencia"
+                        class="w-6 h-6 border-[2px] border-gray-300 rounded-[6px] accent-green-600 cursor-pointer focus:ring-2 focus:ring-green-500 focus:ring-offset-2 bg-transparent" />
+                    <label for="checkbox-edit-buscar"
+                        class="font-sans font-medium text-base md:text-lg text-gray-700 cursor-pointer select-none hover:text-green-600 transition-colors">
+                        Buscar em residência?
+                    </label>
+                </div>
+
+                <div class="flex flex-col gap-[10px]">
+                    <label for="textarea-edit-motivo"
+                        class="font-sans font-semibold text-base md:text-lg text-gray-700">Motivo da Atualização</label>
+                    <textarea data-textarea="editScheduleMotivo" id="textarea-edit-motivo" name="motivoAtualizacao"
+                        placeholder="Descreva o motivo da alteração..." maxlength="150"
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-base md:text-lg text-gray-600 outline-none resize-none min-h-[80px] focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400"></textarea>
+                </div>
+
+                <!-- E-mail e Assunto para Notificação do Cliente -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="input-edit-email" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                            E-mail do Cliente
+                        </label>
+                        <input data-input="editScheduleEmail" id="input-edit-email" type="email" name="email"
+                            placeholder="cliente@exemplo.com" minlength="5" maxlength="50" required
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="input-edit-subject" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                            Assunto do E-mail
+                        </label>
+                        <input data-input="editScheduleSubject" id="input-edit-subject" type="text" name="assunto"
+                            placeholder="Dr.Pet - Agendamento Atualizado" minlength="3" maxlength="70" required
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+                </div>
+
+                <!-- Quill Editor para Mensagem de Atualização -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <label class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                            Mensagem para o Cliente (Quill)
+                        </label>
+                        <span class="text-xs text-gray-400">Editor Rich Text</span>
+                    </div>
+                    <div class="quill-wrapper rounded-lg border-2 border-gray-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/20 transition-all bg-white overflow-hidden">
+                        <div data-quill-editor="editScheduleEmail" class="min-h-[160px]"></div>
+                    </div>
+                </div>
+
+                <button data-button="saveEditSchedule" type="submit"
+                    class="mt-2 w-full flex items-center justify-center gap-3 px-6 py-4 bg-green-600 rounded-[10px] shadow-sm hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-green-500 transition-all cursor-pointer">
+                    <span data-button-text="saveEditSchedule" class="font-sans font-semibold text-lg md:text-xl text-white uppercase">Salvar Alterações e Notificar</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Modal de Cancelamento de Agendamento com Quill e Notificação -->
+    <!-- Popup com os detalhes do agendamento (aberto ao clicar no card da Agenda) -->
+    <aside data-modal="scheduleDetails" role="dialog" aria-modal="true" aria-labelledby="schedule-details-title"
+        class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 p-3 sm:p-4 md:p-6 overflow-y-auto animate-fadeTop">
+        <div class="relative w-full max-w-[720px] my-auto bg-white rounded-[15px] p-6 md:p-8 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.25)] flex flex-col gap-6">
+
+            <button type="button" data-button="closeScheduleDetails" aria-label="Fechar detalhes"
+                class="absolute top-4 right-4 md:top-6 md:right-6 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition-colors outline-none focus:ring-2 focus:ring-green-500">
+                <img src="/images/icons/administrador/delete-slide.svg" alt="" />
+            </button>
+
+            <header class="flex items-start gap-4 pr-10">
+                <img data-details="serviceImage" alt="" class="hidden w-16 h-16 md:w-20 md:h-20 rounded-[10px] object-cover bg-gray-100 shrink-0" />
+                <div class="flex flex-col gap-1.5 min-w-0">
+                    <h3 id="schedule-details-title" data-details="serviceName" class="font-sans font-bold text-xl md:text-2xl text-green-700 break-words"></h3>
+                    <p data-details="when" class="font-sans font-medium text-sm md:text-base text-gray-700"></p>
+                    <span data-details="status" class="inline-block w-fit px-3 py-1 rounded-full font-sans font-semibold text-sm"></span>
+                </div>
+            </header>
+
+            <section class="flex flex-col gap-3">
+                <h4 class="font-sans font-bold text-base md:text-lg text-gray-900 border-b border-gray-200 pb-1.5">Sobre o serviço</h4>
+                <p data-details="serviceDescription" class="font-sans text-sm md:text-base text-gray-700"></p>
+                <dl class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Duração</dt>
+                        <dd data-details="duration" class="font-sans font-semibold text-sm md:text-base text-gray-900"></dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Preço</dt>
+                        <dd data-details="price" class="font-sans font-semibold text-sm md:text-base text-gray-900"></dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="flex flex-col gap-3">
+                <h4 class="font-sans font-bold text-base md:text-lg text-gray-900 border-b border-gray-200 pb-1.5">Agendamento</h4>
+                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Data</dt>
+                        <dd data-details="date" class="font-sans font-semibold text-sm md:text-base text-gray-900"></dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Horário</dt>
+                        <dd data-details="time" class="font-sans font-semibold text-sm md:text-base text-gray-900"></dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Buscar em casa</dt>
+                        <dd data-details="pickup" class="font-sans font-semibold text-sm md:text-base text-gray-900"></dd>
+                    </div>
+                    <div class="flex flex-col sm:col-span-2">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Observações do cliente</dt>
+                        <dd data-details="observation" class="font-sans text-sm md:text-base text-gray-900 whitespace-pre-line break-words"></dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="flex flex-col gap-3">
+                <h4 class="font-sans font-bold text-base md:text-lg text-gray-900 border-b border-gray-200 pb-1.5">Cliente e pet</h4>
+                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Cliente</dt>
+                        <dd data-details="client" class="font-sans font-semibold text-sm md:text-base text-gray-900 break-words"></dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Pet</dt>
+                        <dd data-details="pet" class="font-sans font-semibold text-sm md:text-base text-gray-900 break-words"></dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">Telefone</dt>
+                        <dd class="font-sans font-semibold text-sm md:text-base text-gray-900"><a data-details="phone" class="hover:underline"></a></dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <dt class="font-sans text-xs md:text-sm text-gray-500">E-mail</dt>
+                        <dd data-details="email" class="font-sans font-semibold text-sm md:text-base text-gray-900 break-all"></dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="flex flex-col gap-3">
+                <h4 class="font-sans font-bold text-base md:text-lg text-gray-900 border-b border-gray-200 pb-1.5">Endereço</h4>
+                <div data-details="address" class="flex flex-col gap-1 font-sans text-sm md:text-base text-gray-900"></div>
+            </section>
+
+            <button type="button" data-button="closeScheduleDetailsBottom"
+                class="w-full py-3 rounded-[10px] bg-green-600 hover:bg-green-700 font-sans font-semibold text-base md:text-lg text-gray-50 uppercase transition-colors outline-none focus:ring-4 focus:ring-green-300">
+                Fechar
+            </button>
+        </div>
+    </aside>
+
+    <aside data-modal="cancelSchedule"
+        class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 p-3 sm:p-4 md:p-6 overflow-y-auto animate-fadeTop">
+        <div
+            class="relative w-full max-w-[760px] my-auto bg-white rounded-[15px] p-6 md:p-8 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.25)] flex flex-col gap-6 overflow-hidden">
+
+            <!-- Overlay de Loading -->
+            <div data-loading-cancel
+                class="hidden absolute inset-0 z-50 bg-white/95 backdrop-blur-xs flex-col items-center justify-center gap-4 transition-all">
+                <div class="relative flex items-center justify-center">
+                    <svg class="w-14 h-14 text-red-600 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#fecaca" stroke-width="4"></circle>
+                        <path class="opacity-90" fill="#dc2626" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                    <span class="font-sans font-bold text-lg text-gray-800">Cancelando agendamento...</span>
+                    <span class="font-sans text-sm text-gray-500">Enviando e-mail e preparando WhatsApp</span>
+                </div>
+            </div>
+
+            <button type="button" data-button="closeCancelSchedule"
+                class="absolute top-4 right-4 md:top-6 md:right-6 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition-colors text-xl font-bold leading-none cursor-pointer">
+                <img src="/images/icons/administrador/delete-slide.svg" alt="Fechar Formulário" />
+            </button>
+
+            <div class="flex flex-col gap-1 pr-10">
+                <h3 class="font-sans font-bold text-xl md:text-2xl text-red-alert mt-1">
+                    Cancelar Agendamento e Notificar Cliente
+                </h3>
+                <p class="font-sans text-xs md:text-sm text-gray-500">
+                    O agendamento será excluído do sistema. O cliente receberá o e-mail de justificativa e o WhatsApp será aberto com a mensagem pronta.
+                </p>
+            </div>
+
+            <!-- Resumo do Agendamento -->
+            <div class="p-4 rounded-[10px] bg-gray-50 border border-gray-200 flex flex-col gap-2 text-xs md:text-sm">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-gray-700 font-semibold flex items-center gap-1.5">
+                        <span class="text-gray-400">Cliente:</span>
+                        <strong data-cancel-summary-name class="text-gray-900">Cliente</strong>
+                    </span>
+                    <span class="text-gray-700 flex items-center gap-1.5">
+                        <span class="text-gray-400">Pet:</span>
+                        <strong data-cancel-summary-pet class="text-red-700">Pet</strong>
+                    </span>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-2 border-t border-gray-200/60 pt-2 text-gray-600">
+                    <span><strong>Serviço:</strong> <span data-cancel-summary-service>Banho e Tosa</span></span>
+                    <span><strong>Data/Hora:</strong> <span data-cancel-summary-date>29/10/2026 às 14:00</span></span>
+                    <span><strong>WhatsApp:</strong> <span data-cancel-summary-phone class="text-green-700 font-semibold">--</span></span>
+                </div>
+            </div>
+
+            <!-- Campos de Contato -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <label for="input-cancel-email" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                        E-mail do Destinatário
+                    </label>
+                    <input data-input="cancelScheduleEmail" id="input-cancel-email" type="email" placeholder="cliente@exemplo.com" minlength="5" maxlength="50" required
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all placeholder:text-gray-400" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="input-cancel-phone" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                        WhatsApp do Cliente
+                    </label>
+                    <input data-input="cancelSchedulePhone" id="input-cancel-phone" type="tel" placeholder="(19) 99999-9999" minlength="14" maxlength="15"
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all placeholder:text-gray-400" />
+                </div>
+            </div>
+
+            <!-- Assunto -->
+            <div class="flex flex-col gap-2">
+                <label for="input-cancel-subject" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                    Assunto do E-mail
+                </label>
+                <input data-input="cancelScheduleSubject" id="input-cancel-subject" type="text" placeholder="Assunto do cancelamento" minlength="3" maxlength="70" required
+                    class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-500/20 transition-all placeholder:text-gray-400" />
+            </div>
+
+            <!-- Editor Quill para Cancelamento -->
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between">
+                    <label class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                        Mensagem de Cancelamento
+                    </label>
+                    <span class="text-xs text-gray-400">Editor Rich Text (Quill)</span>
+                </div>
+                <div class="quill-wrapper rounded-lg border-2 border-gray-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-500/20 transition-all bg-white overflow-hidden">
+                    <div data-quill-editor="cancelScheduleEmail" class="min-h-[160px]"></div>
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+                <button type="button" data-button="cancelModalCloseBtn"
+                    class="w-full sm:w-auto px-6 py-3 rounded-lg border-2 border-gray-300 hover:bg-gray-100 font-sans font-semibold text-sm md:text-base text-gray-600 transition-colors cursor-pointer">
+                    Voltar
+                </button>
+                <button type="button" data-button="sendCancelSchedule"
+                    class="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-red-alert hover:opacity-90 rounded-lg font-sans font-semibold text-sm md:text-base text-white shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-red-alert/30 cursor-pointer">
+                    <svg class="w-5 h-5 text-white shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.5 16.6666V3.33325L18.3333 9.99992L2.5 16.6666ZM4.16667 14.1666L14.0417 9.99992L4.16667 5.83325V8.74992L9.16667 9.99992L4.16667 11.2499V14.1666Z" fill="currentColor"/>
+                    </svg>
+                    <span data-button-text="sendCancelSchedule">Confirmar Cancelamento e Notificar</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Modal de Envio de E-mail com Quill para Solicitações de Agendamento -->
+    <aside data-modal="emailAppointment"
+        class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/50 p-3 sm:p-4 md:p-6 overflow-y-auto animate-fadeTop">
+        <div
+            class="relative w-full max-w-[760px] my-auto rounded-[15px] overflow-hidden shadow-[0px_4px_20px_0px_rgba(0,0,0,0.25)]">
+            <!-- Overlay com Ícone de Loading durante o envio de E-mail -->
+            <div data-loading-email
+                class="hidden absolute inset-0 z-50 bg-white/95 backdrop-blur-xs flex-col items-center justify-center gap-4 transition-all">
+                <div class="relative flex items-center justify-center">
+                    <svg class="w-14 h-14 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="animation: spinEmail 0.9s linear infinite;">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="#bbf7d0" stroke-width="4"></circle>
+                        <path class="opacity-90" fill="#16a34a" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <div class="flex flex-col items-center gap-1.5 text-center px-4">
+                    <span class="font-sans font-bold text-xl text-green-700">Enviando e-mail...</span>
+                    <span class="font-sans font-medium text-sm text-gray-500">Aguarde um momento enquanto processamos e enviamos a confirmação.</span>
+                </div>
+                <style>
+                    @keyframes spinEmail { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                </style>
+            </div>
+
+            <form data-form="emailAppointment"
+                class="relative max-h-[92vh] overflow-y-auto scroll bg-white p-6 md:p-10 flex flex-col gap-6">
+                
+                <button type="button" data-button="closeEmailModal"
+                    class="absolute top-4 right-4 md:top-6 md:right-6 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-500 transition-colors text-xl font-bold leading-none cursor-pointer">
+                    <img src="/images/icons/administrador/delete-slide.svg" alt="Fechar Modal" />
+                </button>
+
+                <div class="flex flex-col gap-1 pr-8">
+                    <div class="flex items-center gap-2">
+                        <span data-email-action-badge class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-green-100 text-green-700 border border-green-300">
+                            Aceitar Agendamento
+                        </span>
+                        <span class="text-xs text-gray-400 font-medium">Notificação por E-mail</span>
+                    </div>
+                    <h3 data-email-modal-title class="font-sans font-bold text-xl md:text-2xl text-green-700 mt-1">
+                        Confirmar e Enviar E-mail ao Cliente
+                    </h3>
+                    <p class="font-sans text-xs md:text-sm text-gray-500">
+                        O cliente receberá o e-mail formatado com a atualização de seu agendamento. Você pode personalizar todo o texto antes de enviar.
+                    </p>
+                </div>
+
+                <!-- Resumo do Agendamento Selecionado -->
+                <div data-email-summary class="p-4 rounded-[10px] bg-gray-50 border border-gray-200 flex flex-col gap-2 text-xs md:text-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-gray-700 font-semibold flex items-center gap-1.5">
+                            <span class="text-gray-400">Cliente:</span>
+                            <strong data-email-summary-name class="text-gray-900">Mariana Silva</strong>
+                        </span>
+                        <span class="text-gray-700 flex items-center gap-1.5">
+                            <span class="text-gray-400">Pet:</span>
+                            <strong data-email-summary-pet class="text-green-700">Pipoca</strong>
+                        </span>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-t border-gray-200/60 pt-2 text-gray-600">
+                        <span><strong>Serviço:</strong> <span data-email-summary-service>Banho e Tosa</span></span>
+                        <span><strong>Data:</strong> <span data-email-summary-date>28/10/2026 às 14:00</span></span>
+                        <span><strong>WhatsApp:</strong> <span data-email-summary-phone class="text-green-700 font-semibold">(19) 99359-2253</span></span>
+                    </div>
+                </div>
+
+                <!-- Campos E-mail e WhatsApp do Destinatário -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="input-appointment-email-to" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                            E-mail do Destinatário
+                        </label>
+                        <input data-input="appointmentEmailTo" id="input-appointment-email-to" type="email" name="destinatarioEmail"
+                            placeholder="cliente@exemplo.com" minlength="5" maxlength="50" required
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="input-appointment-phone" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                            WhatsApp do Cliente
+                        </label>
+                        <input data-input="appointmentPhone" id="input-appointment-phone" type="tel" name="destinatarioTelefone"
+                            placeholder="(19) 99999-9999" minlength="14" maxlength="15"
+                            class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                    </div>
+                </div>
+
+                <!-- Campo Assunto -->
+                <div class="flex flex-col gap-2">
+                    <label for="input-appointment-email-subject" class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                        Assunto do E-mail
+                    </label>
+                    <input data-input="appointmentEmailSubject" id="input-appointment-email-subject" type="text" name="assuntoEmail"
+                        placeholder="Assunto da mensagem" minlength="3" maxlength="70" required
+                        class="px-4 py-3 w-full border-2 border-gray-300 rounded-lg font-medium text-sm md:text-base text-gray-700 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all placeholder:text-gray-400" />
+                </div>
+
+                <!-- Editor Quill -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <label class="font-sans font-semibold text-sm md:text-base text-gray-700">
+                            Mensagem do E-mail
+                        </label>
+                        <span class="text-xs text-gray-400">Editor Rich Text (Quill)</span>
+                    </div>
+                    <div class="quill-wrapper rounded-lg border-2 border-gray-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/20 transition-all bg-white overflow-hidden">
+                        <div data-quill-editor="appointmentEmail" class="min-h-[160px]"></div>
+                    </div>
+                    <p class="font-sans text-xs text-gray-500">
+                        • Use a barra de ferramentas para formatar o texto do e-mail com negrito, listas e links.
+                    </p>
+                </div>
+
+                <!-- Botões de Ação do Modal -->
+                <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+                    <button type="button" data-button="cancelEmailModal"
+                        class="w-full sm:w-auto px-6 py-3 rounded-lg border-2 border-gray-300 hover:bg-gray-100 font-sans font-semibold text-sm md:text-base text-gray-600 transition-colors cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button type="button" data-button="sendAppointmentEmail"
+                        class="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-sans font-semibold text-sm md:text-base text-white shadow-sm transition-all focus:outline-none focus:ring-4 focus:ring-green-500/30 cursor-pointer">
+                        <svg class="w-5 h-5 text-white shrink-0" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.5 16.6666V3.33325L18.3333 9.99992L2.5 16.6666ZM4.16667 14.1666L14.0417 9.99992L4.16667 5.83325V8.74992L9.16667 9.99992L4.16667 11.2499V14.1666Z" fill="currentColor"/>
+                        </svg>
+                        <span data-button-text="sendAppointmentEmail">Enviar E-mail e Salvar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Modal de Confirmação -->
+    <div data-confirm-modal
+        class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/30">
+        <div data-confirm-card
+            class="flex flex-col items-center gap-4 bg-white rounded-xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.14)] px-6 py-5 w-[90%] max-w-[260px] scale-90 opacity-0 transition-all duration-200 ease-out">
+
+            <p data-confirm-message class="font-sans font-semibold text-sm text-gray-700 text-center leading-snug">
+                Tem certeza?
+            </p>
+
+            <div class="flex flex-row items-center gap-2 w-full">
+                <button type="button" data-confirm-btn="cancel"
+                    class="flex-1 flex items-center justify-center px-3 py-[7px] rounded-lg border border-gray-300 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300/50 transition-all font-semibold text-xs text-gray-500 uppercase tracking-wide">
+                    Cancelar
+                </button>
+                <button type="button" data-confirm-btn="confirm"
+                    class="flex-1 flex items-center justify-center px-3 py-[7px] rounded-lg bg-red-alert hover:bg-red-alert/90 focus:outline-none focus:ring-2 focus:ring-red-alert/40 transition-all font-semibold text-xs text-white uppercase tracking-wide">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <aside data-modal-info-menu="user" data-modal-info="adm"
+        class="hidden z-[1000] animate-fadeItem opacity-0 fixed bottom-8 left-1/2 -translate-x-1/2 p-4 text-center font-semibold text-lg">
+    </aside>
+
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.umd.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <script>
+        window.initialAgendamentos = <%- JSON.stringify(agendamentos || []).replace(/</g, '\\u003c') %>;
+        window.initialServicos = <%- JSON.stringify(servicos || []).replace(/</g, '\\u003c') %>;
+    </script>
+    <script type="module" src="/javascript/administrador/script-adm.js"></script>
+    <script type="module" src="/javascript/menu-user/script-menu-user.js"></script>
+    <script>
+    // --- logica modal
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal-backdrop')) {
+                event.target.classList.add('hidden');
+                event.target.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButtons = document.querySelectorAll('[data-button="deleteService"]');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const serviceId = this.getAttribute('data-service-id');
+                    const serviceName = this.getAttribute('data-service-name');
+
+                    const confirmacao = confirm(`Tem certeza que deseja excluir o serviço "${serviceName}"? Esta ação não pode ser desfeita.`);
+
+                    if (confirmacao) {
+                        try {
+                            const response = await fetch(`/administrador/servicos/delete/${serviceId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            if (response.ok) {
+                                const serviceCard = this.closest('article.service-card');
+                                if (serviceCard) {
+                                    serviceCard.remove();
+                                }
+                                
+                                alert(`Serviço "${serviceName}" excluído com sucesso!`);
+                                
+                                window.location.reload(); 
+                            } else {
+                                const errorText = await response.text();
+                                alert(`Erro ao excluir: ${errorText}`);
+                            }
+                        } catch (error) {
+                            console.error('Erro na requisição:', error);
+                            alert('Ocorreu um erro ao tentar excluir o serviço. Verifique sua conexão e tente novamente.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    </body>
+</html>

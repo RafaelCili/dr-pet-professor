@@ -1,0 +1,139 @@
+<%- include('layouts/header', { tituloDaPagina: 'Dr.Pet | Cadastrar' }) %>
+
+    <main class="flex flex-col lg:flex-row min-h-[820px]">
+        <div class="order-2 lg:order-1 flex-1 w-full">
+            <img src="/images/forms-images/cadastrar.jpg" alt="Cachorro deitado na grama"
+                class="w-full h-full object-cover min-h-[350px] lg:min-h-full" />
+        </div>
+
+        <div
+            class="order-1 lg:order-2 flex-1 flex items-center justify-center bg-gray-50 px-5 py-10 xs:px-6 xs:py-11 sm:px-8 sm:py-12 lg:px-[40px] lg:py-[50px] xl:px-[60px] xl:py-[60px]">
+            <form data-form="cadastrar" action="/cadastrarAction" method="POST" class="w-full max-w-[760px] flex flex-col gap-8 lg:gap-[30px]">
+                <div id="modal-info" class="text-center font-bold p-2 hidden"></div>
+                <h1
+                    class="text-green-600 font-semibold text-[34px] leading-[42px] xs:text-[38px] xs:leading-[46px] sm:text-[42px] sm:leading-[50px] lg:text-[52px] lg:leading-[64px]">
+                    Cadastrar-se
+                </h1>
+
+                <% if (locals.erro) { %>
+                    <p data-alert="erro" role="alert" class="bg-red-light text-red-alert font-semibold text-[16px] sm:text-[18px] rounded-[10px] px-4 py-3"><%= erro %></p>
+                <% } %>
+                <% if (locals.info) { %>
+                    <p data-alert="info" role="status" class="bg-green-light text-green-600 font-semibold text-[16px] sm:text-[18px] rounded-[10px] px-4 py-3"><%= info %></p>
+                <% } %>
+
+
+                <div class="flex flex-col gap-[30px]">
+                    <div class="flex flex-col gap-[15px]">
+                        <label for="nome"
+                            class="font-medium text-[19px] leading-[24px] tracking-[0.3px] text-gray-800 xs:text-[20px] xs:leading-[25px] sm:text-[22px] sm:leading-[28px] lg:text-[26px] lg:leading-[32px]">Nome
+                            do usuário</label>
+                        <div
+                            class="relative flex items-center border-b-2 border-green-700 h-[62px] px-[15px] py-4 sm:h-[66px] lg:h-[70px] lg:py-5">
+                            <input type="text" id="user-name" name="userName" autocomplete="name"
+                                class="w-full bg-transparent text-[18px] leading-tight text-gray-800 outline-none xs:text-[19px] sm:text-[20px] lg:text-[24px]"
+                                required minlength="3" maxlength="50" />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-[15px]">
+                        <label for="register-email"
+                            class="font-medium text-[19px] leading-[24px] tracking-[0.3px] text-gray-800 xs:text-[20px] xs:leading-[25px] sm:text-[22px] sm:leading-[28px] lg:text-[26px] lg:leading-[32px]">E-mail</label>
+                        <div
+                            class="relative flex items-center border-b-2 border-green-700 h-[62px] px-[15px] py-4 sm:h-[66px] lg:h-[70px] lg:py-5">
+                            <input type="email" id="register-email" name="email" autocomplete="email"
+                                class="w-full bg-transparent text-[18px] leading-tight text-gray-800 outline-none xs:text-[19px] sm:text-[20px] lg:text-[24px]"
+                                required minlength="5" maxlength="50" />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-[15px]">
+                        <label for="phone"
+                            class="font-medium text-[19px] leading-[24px] tracking-[0.3px] text-gray-800 xs:text-[20px] xs:leading-[25px] sm:text-[22px] sm:leading-[28px] lg:text-[26px] lg:leading-[32px]">Telefone</label>
+                        <div
+                            class="relative flex items-center border-b-2 border-green-700 h-[62px] px-[15px] py-4 sm:h-[66px] lg:h-[70px] lg:py-5">
+                            <input data-input="formatPhone" type="tel" id="phone" name="phone" maxlength="15"
+                                minlength="14" pattern="^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$"
+                                title="Digite um telefone válido com DDD. Ex: (11) 99999-9999 ou 11999999999"
+                                placeholder="(XX) XXXXX-XXXX"
+                                class="w-full bg-transparent text-[18px] leading-tight text-gray-800 outline-none xs:text-[19px] sm:text-[20px] lg:text-[24px]"
+                                required />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-[15px]">
+                        <label for="register-password"
+                            class="font-medium text-[19px] leading-[24px] tracking-[0.3px] text-gray-800 xs:text-[20px] xs:leading-[25px] sm:text-[22px] sm:leading-[28px] lg:text-[26px] lg:leading-[32px]">Senha</label>
+                        <div
+                            class="relative flex items-center border-b-2 border-green-700 h-[62px] px-[15px] py-4 sm:h-[66px] lg:h-[70px] lg:py-[20px]">
+                            <input type="password" id="register-password" name="password" autocomplete="new-password"
+                                class="w-full bg-transparent text-[18px] leading-tight text-gray-800 outline-none pr-11 xs:text-[19px] sm:text-[20px] lg:text-2xl"
+                                required minlength="8" maxlength="60" />
+                            <button type="button" data-toggle-password="register-password"
+                                aria-controls="register-password"
+                                class="absolute right-[15px] flex items-center justify-center w-[30px] h-[30px] rounded-[6px] outline-none focus:ring-2 focus:ring-green-300">
+                                <img src="/images/icons/forms/visibility_off.svg" alt="Mostrar senha"
+                                    class="w-[30px] h-[30px]" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-[15px]">
+                        <label for="confirm-password"
+                            class="font-medium text-[19px] leading-[24px] tracking-[0.3px] text-gray-800 xs:text-[20px] xs:leading-[25px] sm:text-[22px] sm:leading-[28px] lg:text-[26px] lg:leading-[32px]">Confirmar
+                            senha</label>
+                        <div
+                            class="relative flex items-center border-b-2 border-green-700 h-[62px] px-[15px] py-4 sm:h-[66px] lg:h-[70px] lg:py-[20px]">
+                            <input type="password" id="confirm-password" name="confirmPassword"
+                                autocomplete="new-password"
+                                class="w-full bg-transparent text-[18px] leading-tight text-gray-800 outline-none pr-11 xs:text-[19px] sm:text-[20px] lg:text-2xl"
+                                required minlength="8" maxlength="60" />
+                            <button type="button" data-toggle-password="confirm-password"
+                                aria-controls="confirm-password"
+                                class="absolute right-[15px] flex items-center justify-center w-[30px] h-[30px] rounded-[6px] outline-none focus:ring-2 focus:ring-green-300">
+                                <img src="/images/icons/forms/visibility_off.svg" alt="Mostrar senha"
+                                    class="w-[30px] h-[30px]" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="/auth/google" data-button="google"
+                    class="w-full h-[64px] rounded-[10px] bg-gray-300 px-4 xs:px-5 sm:px-6 py-3 flex items-center justify-center gap-3 xs:gap-5 sm:gap-8 lg:gap-[50px] hover:opacity-90 transition-opacity outline-none focus:ring-4 focus:ring-gray-400">
+                    <span
+                        class="font-semibold text-lg leading-[22px] text-gray-800 xs:text-2xl sm:text-[26px] lg:text-[26px] lg:leading-[32px]">
+                        Criar com Google</span>
+                    <img src="/images/icons/forms/google-icon.svg" alt="Ícone Google"
+                        class="w-8 h-8 xs:w-9 xs:h-9 sm:w-9 sm:h-9 lg:w-10 lg:h-10" />
+                </a>
+
+                <button type="submit"
+                    class="w-full basis-full h-[69px] rounded-[10px] bg-green-600 px-8 py-4 flex items-center justify-center hover:bg-green-500 transition-colors outline-none focus:ring-4 focus:ring-green-400 mx-auto">
+                    <span
+                        class="font-semibold text-[22px] leading-[28px] text-gray-50 xs:text-[24px] xs:leading-[30px] sm:text-[26px] sm:leading-[33px] lg:text-[30px] lg:leading-[37px]">Criar</span>
+                </button>
+
+                <div class="w-full flex items-center justify-center pt-1">
+                    <p class="text-center font-medium text-lg xs:text-xl sm:text-[22px] text-gray-700">
+                        Já tem uma conta?
+                        <a href="/login"
+                            class="font-bold text-green-600 hover:text-green-500 hover:underline underline-offset-4 transition-all duration-200 outline-none focus:ring-2 focus:ring-green-400 rounded px-1 inline-flex items-center gap-1.5 group">
+                            <span>Faça login</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <aside data-modal-info-menu="user" data-modal-info="cadastrar"
+        class="hidden z-[1000] animate-fadeItem opacity-0 fixed bottom-8 left-1/2 -translate-x-1/2 p-4 text-center font-semibold text-lg">
+    </aside>
+
+<%- include('layouts/footer', { scripts: [
+    { src: '/javascript/menu-user/script-menu-user.js', module: true },
+    { src: '/javascript/forms/cadastrar-account/script-createAccount.js', module: true }
+]}) %>

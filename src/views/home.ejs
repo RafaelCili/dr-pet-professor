@@ -1,0 +1,284 @@
+<%- include('layouts/header', { tituloDaPagina: 'Dr. Pet', swiper: true }) %>
+
+    <main>
+        <section class="relative w-full h-[400px] md:h-[600px] lg:h-[800px] bg-gray-100">
+            <div class="swiper w-full h-full">
+                <div data-content-imgs="slideHome" class="swiper-wrapper">
+                    <% if (locals.slides && slides.length > 0) { %>
+                        <% slides.forEach(slide => { %>
+                            <figure class="swiper-slide w-full h-full">
+                                <img src="/slides/imagem/<%= slide.id %>" alt="<%= slide.alt || 'Dr. Pet Slide' %>"
+                                    class="w-full h-full object-cover object-center">
+                            </figure>
+                        <% }) %>
+                    <% } else { %>
+                        <figure class="swiper-slide w-full h-full">
+                            <img src="/images/introduction.png" alt="introduction"
+                                class="w-full h-full object-cover object-center">
+                        </figure>
+                    <% } %>
+                </div>
+
+                <% if(slides.length > 1){ %>
+                    <div class="swiper-pagination custom-swiper-pagination"></div>
+                    <div class="swiper-button-prev custom-swiper-button !left-4 lg:!left-10">
+                        <img src="/images/icons/slide/arrow-left.svg" alt="Anterior"
+                            class="w-[20px] h-[20px] lg:w-[32px] lg:h-[32px] transition-all duration-300">
+                    </div>
+                    <div class="swiper-button-next custom-swiper-button !right-4 lg:!right-10">
+                        <img src="/images/icons/slide/arrow-right.svg" alt="Próximo"
+                            class="w-[20px] h-[20px] lg:w-[32px] lg:h-[32px] transition-all duration-300">
+                    </div>
+                <% } %>
+
+
+            </div>
+        </section>
+
+        <section id="servicos" class="flex flex-col border-t-[4px] border-green-300">
+
+            <div class="bg-gray-100">
+                <div
+                    class="container p-[30px] md:p-[60px] lg:p-20 flex flex-col items-center justify-center gap-10 md:gap-[60px]">
+                    <h2 class="text-4xl md:text-5xl font-bold text-center text-green-700">
+                        Nossos Serviços
+                    </h2>
+
+                    <div class="flex flex-wrap items-stretch justify-center gap-[50px] w-full p-5">
+                        <% if (locals.servicos && servicos.length > 0) { %>
+                            <% servicos.forEach(servico => { %>
+                                <% 
+                                    const slug = (servico.nome || '')
+                                        .toLowerCase()
+                                        .normalize('NFD')
+                                        .replace(/[\u0300-\u036f]/g, '')
+                                        .replace(/\s+e\s+/g, '-')
+                                        .replace(/\s+/g, '-')
+                                        .replace(/[^a-z0-9-]/g, '');
+                                    const defaultImg = (slug === 'banho-tosa' || slug === 'vacinacao' || slug === 'cirurgia') 
+                                        ? `/images/services/${slug}.png` 
+                                        : '/images/services/banho-tosa.png';
+                                %>
+                                <a href="/agenda?service=<%= slug %>" data-login class="service-card flex flex-col cursor-pointer">
+                                    <img src="/servicos/imagem/<%= servico.id %>"
+                                        onerror="this.onerror=null; this.src='<%= defaultImg %>';"
+                                        alt="<%= servico.nome || 'Serviço' %>"
+                                        class="w-full h-[300px] object-cover" />
+                                    <div class="p-[30px] flex-1 flex flex-col gap-[10px]">
+                                        <h3 class="text-2xl md:text-3xl font-semibold text-gray-800">
+                                            <%= servico.nome %>
+                                        </h3>
+                                        <p class="text-lg md:text-[22px] font-normal leading-snug text-gray-700">
+                                            <%= servico.descricao %>
+                                        </p>
+                                    </div>
+                                </a>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="flex flex-col items-center justify-center py-12 px-6 text-center max-w-[600px] mx-auto bg-white rounded-[15px] shadow-sm border border-gray-200">
+                                <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-4">
+                                    <img src="/images/icons/calendar_clock_green.svg" alt="Sem serviços" class="w-8 h-8" />
+                                </div>
+                                <p class="text-xl md:text-2xl font-medium text-gray-700 mt-3">
+                                    Infelizmente ainda não temos serviço, volte mais tarde.
+                                </p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-green-600">
+                <div
+                    class="container px-[30px] py-10 md:px-[60px] lg:px-20 flex flex-wrap items-center justify-between gap-[30px]">
+                    <h3
+                        class="text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-50 flex-1 min-w-[280px] leading-tight">
+                        Gostou de nossos serviços?
+                    </h3>
+                    <div class="w-fit mx-auto md:mx-0">
+                        <a href="/agenda?service=banho-tosa" data-login
+                            class="flex items-center gap-[10px] md:gap-[15px] px-5 md:px-6 py-[12px] bg-green-400 hover:bg-green-300 text-xl md:text-2xl font-semibold text-gray-50 uppercase rounded-[10px] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 outline-none focus:ring-4 focus:ring-green-300">
+                            AGENDE AGORA
+                            <img src="/images/icons/calendar_clock.svg" alt="Agendamento"
+                                class="w-6 h-6 md:w-[30px] md:h-[30px]" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray-50 border-t-[4px] border-green-300" id="sobre">
+            <div class="container mx-auto py-[60px] lg:py-[100px] px-5 xs:px-[30px] md:px-10 lg:px-20">
+                <div class="flex flex-col lg:flex-row items-center gap-[50px] lg:gap-20">
+
+                    <figure
+                        class="w-full sm:w-[80%] lg:flex-[1_1_350px] max-w-[500px] flex-shrink-0 group mx-auto lg:mx-0">
+
+                        <img src="/images/imagem-sobre.jpg" alt="Veterinário Dr.Pet" class="w-full h-auto object-cover rounded-[10px] border-[2px] border-green-800 transition-all duration-300 
+                            shadow-[12px_12px_0_0_#2AF29B] 
+                            md:shadow-[16px_16px_0_0_#2AF29B] 
+                            lg:shadow-[20px_20px_0_0_#2AF29B] 
+                            group-hover:shadow-[24px_24px_0_0_#2AF29B] 
+                            group-hover:-translate-y-2 group-hover:-translate-x-1" />
+                    </figure>
+
+                    <article class="flex-[400px] flex flex-col gap-[30px] lg:gap-10 w-full">
+
+                        <h2 class="text-[36px] md:text-[46px] lg:text-[52px] font-bold text-green-700 leading-tight">
+                            Quem somos nós?
+                        </h2>
+
+                        <div class="flex flex-col gap-[30px]">
+
+                            <p class="text-lg md:text-[22px] font-medium text-gray-700 leading-snug">
+                                A Dr. Pet oferece cuidados de alta qualidade para o bem-estar e a saúde do seu animal de
+                                estimação. Nosso compromisso se estende desde a prevenção até o tratamento de diversas
+                                patologias, priorizando sempre uma comunicação transparente e orientações detalhadas
+                                para você, tutor.
+                            </p>
+                            <ul class="flex flex-col gap-5">
+
+                                <li class="flex items-center gap-5 group">
+                                    <img src="/images/icons/check-about.svg" alt="Check"
+                                        class="w-6 h-6 md:w-8 md:h-8" />
+                                    <p class="text-lg md:text-xl font-normal text-gray-900 leading-snug">
+                                        <strong
+                                            class="font-semibold block mb-1 text-gray-900 group-hover:text-green-700 transition-colors">Cuidado
+                                            e Assistência Completa</strong>
+                                        Prevenção, tratamentos médicos, além de serviços de banho e tosa para o seu pet.
+                                    </p>
+                                </li>
+
+                                <li class="flex items-center gap-5 group">
+                                    <img src="/images/icons/check-about.svg" alt="Check"
+                                        class="w-6 h-6 md:w-8 md:h-8" />
+                                    <p class="text-lg md:text-xl font-normal text-gray-900 leading-snug">
+                                        <strong
+                                            class="font-semibold block mb-1 text-gray-900 group-hover:text-green-700 transition-colors">Infraestrutura
+                                            e Equipe Qualificada</strong>
+                                        Equipamentos modernos e profissionais experientes para garantir o melhor
+                                        atendimento.
+                                    </p>
+                                </li>
+
+                                <li class="flex items-center gap-5 group">
+                                    <img src="/images/icons/check-about.svg" alt="Check"
+                                        class="w-6 h-6 md:w-8 md:h-8" />
+                                    <p class="text-lg md:text-xl font-normal text-gray-900 leading-snug">
+                                        <strong
+                                            class="font-semibold block mb-1 text-gray-900 group-hover:text-green-700 transition-colors">Atendimento
+                                            Presencial e Domiciliar</strong>
+                                        Flexibilidade e comodidade para atender a sua necessidade, na clínica ou no lar.
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gray-100 border-t-4 border-t-green-300 relative" id="petShop">
+            <div class="container mx-auto py-[60px] lg:py-[100px] px-5 xs:px-[30px] md:px-10 lg:px-20">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-[70px] lg:gap-10">
+
+                    <article
+                        class="flex-[1_1_400px] xl:flex-[1_1_500px] max-w-[700px] flex flex-col gap-[30px] lg:gap-10 w-full lg:pr-10">
+
+                        <div class="flex flex-col gap-1 text-center lg:text-left">
+                            <h3 class="text-2xl md:text-3xl font-bold text-green-400 tracking-wide">
+                                Nosso
+                            </h3>
+                            <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-green-700 leading-none">
+                                Pet Shop
+                            </h2>
+                        </div>
+
+                        <p
+                            class="text-lg md:text-xl font-medium text-gray-600 leading-relaxed max-w-[550px] mx-auto lg:mx-0">
+                            Em nosso petshop, você encontra tudo o que seu pet precisa para se manter saudável e feliz!
+                            Oferecemos uma ampla gama de produtos, como rações de qualidade, brinquedos, acessórios e
+                            itens de higiene, sempre com as melhores marcas do mercado. Nosso compromisso é garantir que
+                            seu animal receba o melhor em cuidado e bem-estar.
+                        </p>
+
+                        <div
+                            class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 mb-2 rounded-xl w-full mx-auto lg:mx-0">
+
+                            <div
+                                class="flex flex-col items-center justify-center gap-2 p-2 hover:scale-105 transition-transform duration-300 min-w-[80px]">
+                                <figure
+                                    class="flex items-center justify-center w-[56px] h-[56px] lg:w-[72px] lg:h-[72px] bg-green-light rounded-[14px] shrink-0 shadow-sm transition-all duration-300">
+                                    <img src="/images/icons/petshop-section/bag.svg" alt="Acessórios"
+                                        class="w-[30px] h-[30px] lg:w-[40px] lg:h-[40px] object-contain transition-all duration-300" />
+                                </figure>
+                                <span
+                                    class="text-base lg:text-lg font-bold text-gray-800 text-center transition-all duration-300">Acessórios</span>
+                            </div>
+
+                            <div
+                                class="flex flex-col items-center justify-center gap-2 p-2 hover:scale-105 transition-transform duration-300 min-w-[80px]">
+                                <figure
+                                    class="flex items-center justify-center w-[56px] h-[56px] lg:w-[72px] lg:h-[72px] bg-red-light rounded-[14px] shrink-0 shadow-sm transition-all duration-300">
+                                    <img src="/images/icons/petshop-section/toys.svg" alt="Brinquedos"
+                                        class="w-[30px] h-[30px] lg:w-[40px] lg:h-[40px] object-contain transition-all duration-300" />
+                                </figure>
+                                <span
+                                    class="text-base lg:text-lg font-bold text-gray-800 text-center transition-all duration-300">Brinquedos</span>
+                            </div>
+
+                            <div
+                                class="flex flex-col items-center justify-center gap-2 p-2 hover:scale-105 transition-transform duration-300 min-w-[80px]">
+                                <figure
+                                    class="flex items-center justify-center w-[56px] h-[56px] lg:w-[72px] lg:h-[72px] bg-orange-light rounded-[14px] shrink-0 shadow-sm transition-all duration-300">
+                                    <img src="/images/icons/petshop-section/pet-food.svg" alt="Ração"
+                                        class="w-[30px] h-[30px] lg:w-[40px] lg:h-[40px] object-contain transition-all duration-300" />
+                                </figure>
+                                <span
+                                    class="text-base lg:text-lg font-bold text-gray-800 text-center transition-all duration-300">Rações</span>
+                            </div>
+
+                            <div
+                                class="flex flex-col items-center justify-center gap-2 p-2 hover:scale-105 transition-transform duration-300 min-w-[80px]">
+                                <figure
+                                    class="flex items-center justify-center w-[56px] h-[56px] lg:w-[72px] lg:h-[72px] bg-blue-light rounded-[14px] shrink-0 shadow-sm transition-all duration-300">
+                                    <img src="/images/icons/petshop-section/hygiene.svg" alt="Higiene"
+                                        class="w-[30px] h-[30px] lg:w-[40px] lg:h-[40px] object-contain transition-all duration-300" />
+                                </figure>
+                                <span
+                                    class="text-base lg:text-lg font-bold text-gray-800 text-center transition-all duration-300">Higiene</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 flex justify-center lg:justify-start">
+                            <a href="/loja"
+                                class="inline-flex items-center justify-center gap-4 px-8 py-4 bg-green-600 hover:bg-green-500 text-lg md:text-xl font-bold text-gray-50 uppercase rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 outline-none focus:ring-4 focus:ring-green-400 group">
+                                VEJA MAIS SOBRE
+                                <img src="/images/icons/arrow.svg" alt="Seta Direita"
+                                    class="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300 invert brightness-0" />
+                            </a>
+                        </div>
+                    </article>
+
+                    <figure
+                        class="w-full sm:w-[80%] lg:flex-[1_1_400px] xl:flex-[1_1_500px] min-w-[280px] max-w-[500px] flex-shrink-0 aspect-square relative mt-[50px] lg:mt-0 group mx-auto">
+                        <img src="/images/icons/petshop-section/dog-petshop.png" alt="Cachorro Pet Shop"
+                            class="absolute top-0 right-0 aspect-square rounded-2xl w-[65%] object-cover shadow-xl transition-all duration-700 group-hover:-translate-y-4 group-hover:-translate-x-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] group-hover:z-30 z-10" />
+                        <img src="/images/icons/petshop-section/cat-petshop.png" alt="Gato Pet Shop"
+                            class="absolute bottom-0 left-0 aspect-square rounded-2xl w-[65%] object-cover shadow-xl transition-all duration-700 group-hover:-translate-y-2 group-hover:translate-x-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] z-20 group-hover:z-20" />
+                    </figure>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <aside data-modal-info-menu="user" data-modal-info="home"
+        class="hidden z-[1000] animate-fadeItem opacity-0 fixed bottom-8 left-1/2 -translate-x-1/2 p-4 text-center font-semibold text-lg">
+    </aside>
+
+<!-- Dessa maneira passo textos específicos para o footer colocar as tag scripts no final do body para usar boas práticas de otimização de carregamento -->
+<%- include('layouts/footer', { scripts: [
+    { src: '/javascript/home/script-home.js', module: true },
+    { src: '/javascript/menu-user/script-menu-user.js', module: true }
+] }) %>

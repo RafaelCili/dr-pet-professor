@@ -1,0 +1,204 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../database/mysql');
+const { verificarLogin } = require('./middlewares');
+const { montarEndereco } = require('../utils/endereco');
+
+function cleanPhoneForDatabase(rawPhone) {
+    let digits = String(rawPhone || '').replace(/\D/g, '');
+    if (digits.length > 11 && digits.startsWith('55')) {
+        digits = digits.slice(2);
+    }
+    return digits.slice(0, 12);
+}
+
+function horaParaMinutos(hora) {
+    const [h, m] = String(hora).split(':').map(Number);
+    return h * 60 + (m || 0);
+}
+
+// Confere se o intervalo [hora, hora + duração do serviço] colide com agendamentos do mesmo dia
+function horarioDisponivel(date, hour, serviceId, callback) {
+    db.query('SELECT duracao FROM service_infos WHERE id = ?', [serviceId], (err, servicos) => {
+        if (err) return callback(err);
+        if (servicos.length === 0) return callback(null, { ok: false, motivo: 'servico' });
+
+        const inicio = horaParaMinutos(hour);
+        const fim = inicio + (Number(servicos[0].duracao) || 30);
+
+        db.query(
+            `SELECT TIME_FORMAT(a.hourAgendamento, '%H:%i') AS hora, s.duracao
+             FROM agenda a JOIN service_infos s ON s.id = a.fk_service
+             WHERE a.dateAgendamento = ?`,
+            [date],
+            (err2, existentes) => {
+                if (err2) return callback(err2);
+                const conflito = existentes.some(e => {
+                    const ini = horaParaMinutos(e.hora);
+                    const f = ini + (Number(e.duracao) || 30);
+                    return inicio < f && ini < fim;
+                });
+                callback(null, { ok: !conflito, motivo: conflito ? 'ocupado' : null });
+            }
+        );
+    });
+}
+
+router.get('/form-agendar', verificarLogin, async (req, res) => {
+    const userId = req.session && req.session.usuario ? req.session.usuario.id : null;
+
+    if (!userId) {
+        return res.render('form-agendar', { usuario: {}, pet: {}, enderecos: [] });
+    }
+
+    const dbp = db.promise();
+
+    try {
+        const [[dados], [enderecos]] = await Promise.all([
+            dbp.query(`
+                SELECT
+                    JSON_OBJECT('id', u.id, 'nome', u.nome, 'email', u.email, 'telefone', u.telefone) AS usuario,
+                    JSON_OBJECT('id', p.id, 'nome', p.nome, 'raca', p.raca,
+                                'genero', p.genero, 'descricao', p.descricao) AS pet
+                FROM usuario u
+                LEFT JOIN pet p ON u.id = p.usuario_id
+                WHERE u.id = ?
+                ORDER BY p.id
+                LIMIT 1`, [userId]),
+            dbp.query(
+                'SELECT id, rua, numero, cep, cidade, estado, bairro, complemento FROM endereco WHERE usuario_id = ? ORDER BY id',
+                [userId])
+        ]);
+
+        const { usuario, pet } = dados[0] || {};
+        return res.render('form-agendar', { usuario, pet, enderecos });
+    } catch (err) {
+        console.error('Erro ao buscar dados do usuário:', err);
+        return res.status(500).send('Erro ao buscar dados do usuário.');
+    }
+});
+
+router.post('/form-agendar/send', verificarLogin, (req, res) => {
+    const userId = req.session && req.session.usuario ? req.session.usuario.id : null;
+
+    if (!userId) {
+        return res.status(401).json({ erro: 'Usuário não autenticado.', redirect: '/login' });
+    }
+
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ erro: 'Dados do formulário inválidos.' });
+    }
+
+    const { 
+        nome, 
+        telefone, 
+        nomePet, 
+        descricao, 
+        buscarResidencia,
+        service,
+        date,
+        hour
+    } = req.body;
+
+    const serviceId = service || req.body.serviceId || req.body.fk_service;
+    const telLimpo = cleanPhoneForDatabase(telefone);
+    const nomeLimpo = String(nome || '').trim().slice(0, 255);
+    const resultadoEndereco = montarEndereco(req.body);
+    const enderecoLimpo = resultadoEndereco.endereco;
+    const nomePetLimpo = String(nomePet || '').trim().slice(0, 100);
+    const descricaoLimpa = descricao ? String(descricao).trim().slice(0, 255) : null;
+    const translado = Boolean(
+        buscarResidencia === true || 
+        buscarResidencia === 'true' || 
+        buscarResidencia === 'on' || 
+        buscarResidencia === 1
+    );
+
+    if (!serviceId) {
+        return res.status(400).json({ erro: 'Serviço não selecionado. Por favor, volte e escolha um serviço.' });
+    }
+
+    if (!date || !hour) {
+        return res.status(400).json({ erro: 'Data e horário são obrigatórios para o agendamento.' });
+    }
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(date)) || !/^\d{2}:\d{2}$/.test(String(hour))) {
+        return res.status(400).json({ erro: 'Data ou horário em formato inválido.' });
+    }
+
+    if (resultadoEndereco.erro) {
+        return res.status(400).json({ erro: resultadoEndereco.erro });
+    }
+
+    if (telLimpo.length < 10 || telLimpo.length > 11) {
+        return res.status(400).json({ erro: 'Informe um telefone válido com DDD para concluir o agendamento.' });
+    }
+
+    horarioDisponivel(date, hour, serviceId, (errDisp, disp) => {
+        if (errDisp) {
+            console.error('Erro ao verificar disponibilidade:', errDisp);
+            return res.status(500).json({ erro: 'Erro ao verificar disponibilidade do horário.' });
+        }
+        if (!disp.ok) {
+            const erro = disp.motivo === 'servico'
+                ? 'Serviço não encontrado.'
+                : 'Esse horário não está mais disponível. Volte e escolha outro horário.';
+            return res.status(409).json({ erro });
+        }
+        salvarAgendamento();
+    });
+
+    function salvarAgendamento() {
+    const query = `
+        INSERT INTO agenda (
+            dateAgendamento,
+            hourAgendamento,
+            buscarResidencia,
+            observation,
+            endereco,
+            nome,
+            telefone,
+            nomePet,
+            fk_user,
+            fk_service
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
+
+    db.query(query, [
+            date, 
+            hour, 
+            translado, 
+            descricaoLimpa, 
+            enderecoLimpo, 
+            nomeLimpo, 
+            telLimpo, 
+            nomePetLimpo, 
+            userId, 
+            serviceId
+        ], 
+        (err, result) => {
+        if (err) {
+            console.error('Erro ao salvar agendamento:', err);
+            return res.status(500).json({ erro: 'Erro ao salvar agendamento no banco de dados.' });
+        } else {
+            // Contas criadas com o Google não têm telefone: guarda o informado no primeiro agendamento
+            db.query('UPDATE usuario SET telefone = ? WHERE id = ? AND telefone IS NULL', [telLimpo, userId], (errTel) => {
+                if (errTel) console.error('Erro ao salvar telefone do usuário:', errTel);
+            });
+
+            // Se a requisição veio via Fetch / JSON (AJAX)
+            if (req.is('json') || req.headers.accept?.includes('application/json')) {
+                return res.status(200).json({ 
+                    sucesso: true, 
+                    redirect: '/', 
+                    id: result.insertId 
+                });
+            }
+            // Submissão nativa de formulário HTML
+            return res.redirect('/');
+        }
+    });
+    }
+});
+
+module.exports = router;

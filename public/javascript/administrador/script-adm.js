@@ -1,0 +1,39 @@
+import selectSectionAdm from "./select-section-adm.js";
+import SlidesHome from "./SlidesHome.js";
+import Agenda from "./Agenda.js";
+import Products from "./Products.js";
+import FormProduct from "./FormProduct.js";
+import eventoSlides from "./eventoSlides.js";
+import adminPrecosAgenda from "./admin-precos-agenda.js";
+import AppointmentRequests from "./AppointmentRequests.js";
+import UserReports from "./UserReports.js";
+import initReports from "./Reports.js";
+import setupEnderecoCEP from "../utils/enderecoCEP.js";
+import { setupScheduleDetails } from "./scheduleDetails.js";
+import Services from "./Services.js";
+import formatPhone from "../utils/formatPhone.js";
+
+document.addEventListener('DOMContentLoaded', () => {
+    selectSectionAdm();
+    formatPhone('[data-input="formatPhone"], [data-input="cancelSchedulePhone"], [data-input="appointmentPhone"]');
+    const slidesConfig = new SlidesHome('[data-add-slide]', '[data-content-slides]').init();
+    const scheduleConfig = new Agenda('[data-content-schedule]', '[data-input-date="adm"]', '[data-select="service"]', '[data-button="searchSchedule"]').init();
+    const appointmentRequests = new AppointmentRequests('[data-content-appointment-requests]').init();
+    const services = new Services('[data-content-services-delete]').init();
+    const formProduct = new FormProduct('[data-modal="addProduct"]', '[data-form="addProduct"]', '[data-button="closeFormProduct"]', 
+        '[data-input="product-name"]', '[data-select-new="productCategory"]', '[data-input="priceProduct"]', '[data-textarea="shortDescription"]', '[data-textarea="longDescription"]',
+        '[data-quill-editor="longDescription"]',
+        '[data-input="imageMainProduct"]', '[data-input="imageSlideProduct"]', '[data-info="mainImage"]', '[data-info="slideImages"]', '[data-button="createProduct"]').init();
+    const productsConfig = new Products('[data-content-products="table"]', '[data-button="addProduct"]', '[data-input="filterProduct"]', '[data-select="typeProduct"]', formProduct).init();
+    const userReports = new UserReports({
+        sectionSelector: '#section-relatorios',
+        searchInputSelector: '[data-input="searchUsers"]',
+        tableBodySelector: '[data-content-users="table"]',
+        paginationSelector: '[data-pagination="users"]'
+    }).init();
+    setupEnderecoCEP();
+    setupScheduleDetails();
+    initReports();
+    adminPrecosAgenda();
+    eventoSlides();
+});

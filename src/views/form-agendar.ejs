@@ -1,0 +1,398 @@
+<%- include('layouts/header', { tituloDaPagina: 'Dr.Pet | Agendamento' }) %>
+
+<%
+    const enderecosSalvos = locals.enderecos || [];
+    const enderecoInicial = enderecosSalvos[0] || {};
+
+    const formatarCep = (cep) => {
+        const d = String(cep || '').replace(/\D/g, '');
+        return d.length === 8 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+    };
+    const resumoEndereco = (e) => [e.rua, e.numero ? `nº ${e.numero}` : '', e.bairro, e.cidade, e.estado].filter(Boolean).join(', ')
+        + (e.complemento ? ` (${e.complemento})` : '');
+%>
+
+    <main class="flex flex-col lg:flex-row">
+        <section
+            class="order-1 lg:order-2 flex-1 flex items-center justify-center bg-gray-50 px-5 py-10 xs:px-6 xs:py-11 sm:px-8 sm:py-12 lg:px-[60px] lg:py-[60px]"
+        >
+            <form
+                action="/form-agendar/send"
+                method="POST"
+                class="w-full flex flex-col gap-10 md:gap-[50px]"
+            >
+                <h1
+                    class="text-green-500 font-bold text-3xl md:text-[40px] md:leading-[50px]"
+                >
+                    Dados para o Agendamento
+                </h1>
+
+                <div class="flex flex-col gap-10 md:gap-[50px]">
+                    <fieldset class="flex flex-col gap-6 md:gap-[30px]">
+                        <legend class="sr-only">Dados do Dono</legend>
+
+                        <div class="flex flex-col gap-[15px]">
+                            <label
+                                for="nome"
+                                class="text-gray-900 font-medium text-xl md:text-[26px] md:leading-[32px]"
+                                >Nome</label
+                            >
+                            <input
+                                type="text"
+                                id="nome"
+                                name="nome"
+                                placeholder="Seu nome completo"
+                                class="w-full px-[15px] py-3 md:py-5 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                required
+                                minlength="3"
+                                maxlength="50"
+                                pattern="^[a-zA-ZÀ-Ã¿\s]+$"
+                                value="<%= usuario ? (usuario.nome || '') : '' %>"
+                            />
+                        </div>
+
+                        <div class="flex flex-col gap-[15px]">
+                            <label
+                                for="telefone"
+                                class="text-gray-900 font-medium text-xl md:text-[26px] md:leading-[32px]"
+                                >Telefone</label
+                            >
+                            <input
+                                data-input="formatPhone"
+                                type="tel"
+                                id="telefone"
+                                name="telefone"
+                                placeholder="(00) 00000-0000"
+                                class="w-full px-[15px] py-3 md:py-5 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                required
+                                minlength="14"
+                                maxlength="15"
+                                pattern="^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$"
+                                title="Digite um telefone válido com DDD. Ex: (11) 99999-9999 ou 11999999999"
+                                value="<%= usuario ? (usuario.telefone || '') : '' %>"
+                            />
+                        </div>
+
+                        <div class="flex flex-col gap-[15px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                <span class="text-gray-900 font-medium text-xl md:text-[26px] md:leading-[32px]">Endereço</span>
+                                <% if (enderecosSalvos.length > 0) { %>
+                                    <span class="text-xs md:text-sm text-gray-500 font-normal">
+                                        Escolha um endereço salvo ou informe outro
+                                    </span>
+                                <% } else { %>
+                                    <span class="text-xs md:text-sm text-gray-500 font-normal">
+                                        Digite o CEP e preenchemos o restante para você
+                                    </span>
+                                <% } %>
+                            </div>
+
+                            <% if (enderecosSalvos.length > 0) { %>
+                                <div class="flex flex-col gap-2">
+                                    <span class="text-sm font-semibold text-gray-700">Selecione um endereço salvo:</span>
+                                    <div class="flex flex-wrap gap-2.5" id="container-botoes-endereco">
+                                        <% enderecosSalvos.forEach((e, i) => { %>
+                                            <button
+                                                type="button"
+                                                class="btn-escolha-endereco flex items-center gap-2 px-3.5 py-2 rounded-lg border text-sm md:text-base font-medium transition-all duration-200 cursor-pointer <%= i === 0 ? 'bg-green-600 text-white border-green-600 shadow-sm' : 'bg-white text-gray-700 border-gray-300 hover:border-green-500 hover:bg-green-50/50' %>"
+                                                data-cep="<%= e.cep || '' %>"
+                                                data-rua="<%= e.rua || '' %>"
+                                                data-numero="<%= e.numero || '' %>"
+                                                data-bairro="<%= e.bairro || '' %>"
+                                                data-cidade="<%= e.cidade || '' %>"
+                                                data-estado="<%= e.estado || '' %>"
+                                                data-complemento="<%= e.complemento || '' %>"
+                                                data-index="<%= i %>"
+                                                title="<%= resumoEndereco(e) %>"
+                                            >
+                                                <span>🏠</span>
+                                                <span class="font-semibold">Endereço <%= i + 1 %></span>
+                                                <% if (e.bairro) { %>
+                                                    <span class="text-xs opacity-80">(<%= e.bairro %>)</span>
+                                                <% } %>
+                                            </button>
+                                        <% }) %>
+
+                                        <button
+                                            type="button"
+                                            id="btn-outro-endereco"
+                                            class="btn-escolha-endereco flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-dashed border-gray-400 bg-white text-gray-600 hover:border-green-600 hover:text-green-700 hover:bg-green-50 text-sm md:text-base font-medium transition-all duration-200 cursor-pointer"
+                                        >
+                                            <span> + Outro endereço</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            <% } %>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-x-6 gap-y-6 md:gap-y-8">
+                                <div class="flex flex-col gap-2 sm:col-span-5">
+                                    <label for="endereco-cep" class="text-gray-900 font-medium text-base md:text-xl">CEP</label>
+                                    <input
+                                        type="text"
+                                        id="endereco-cep"
+                                        name="cep"
+                                        data-address="cep"
+                                        inputmode="numeric"
+                                        autocomplete="postal-code"
+                                        placeholder="00000-000"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                        required
+                                        maxlength="9"
+                                        pattern="\d{5}-?\d{3}"
+                                        title="Digite um CEP com 8 dígitos. Ex: 13733-130"
+                                        value="<%= formatarCep(enderecoInicial.cep) %>"
+                                    />
+                                </div>
+
+                                <p
+                                    data-address-status
+                                    role="status"
+                                    aria-live="polite"
+                                    class="sm:col-span-7 sm:self-end text-sm md:text-base text-gray-600 min-h-[1.5rem]"
+                                ></p>
+
+                                <div class="flex flex-col gap-2 sm:col-span-8">
+                                    <label for="endereco-rua" class="text-gray-900 font-medium text-base md:text-xl">Rua</label>
+                                    <input
+                                        type="text"
+                                        id="endereco-rua"
+                                        name="rua"
+                                        data-address="rua"
+                                        autocomplete="address-line1"
+                                        placeholder="Nome da rua"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                        required
+                                        minlength="3"
+                                        maxlength="70"
+                                        value="<%= enderecoInicial.rua || '' %>"
+                                    />
+                                </div>
+
+                                <div class="flex flex-col gap-2 sm:col-span-4">
+                                    <label for="endereco-numero" class="text-gray-900 font-medium text-base md:text-xl">Número</label>
+                                    <input
+                                        type="text"
+                                        id="endereco-numero"
+                                        name="numero"
+                                        data-address="numero"
+                                        placeholder="Ex: 100 ou S/N"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                        required
+                                        maxlength="10"
+                                        value="<%= enderecoInicial.numero || '' %>"
+                                    />
+                                </div>
+
+                                <div class="flex flex-col gap-2 sm:col-span-12">
+                                    <label for="endereco-bairro" class="text-gray-900 font-medium text-base md:text-xl">Bairro</label>
+                                    <input
+                                        type="text"
+                                        id="endereco-bairro"
+                                        name="bairro"
+                                        data-address="bairro"
+                                        placeholder="Nome do bairro"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                        required
+                                        minlength="2"
+                                        maxlength="40"
+                                        value="<%= enderecoInicial.bairro || '' %>"
+                                    />
+                                </div>
+
+                                <div class="flex flex-col gap-2 sm:col-span-8">
+                                    <label for="endereco-cidade" class="text-gray-900 font-medium text-base md:text-xl">Cidade</label>
+                                    <input
+                                        type="text"
+                                        id="endereco-cidade"
+                                        name="cidade"
+                                        data-address="cidade"
+                                        autocomplete="address-level2"
+                                        placeholder="Nome da cidade"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                        required
+                                        minlength="2"
+                                        maxlength="40"
+                                        value="<%= enderecoInicial.cidade || '' %>"
+                                    />
+                                </div>
+
+                                <div class="flex flex-col gap-2 sm:col-span-4">
+                                    <label for="endereco-estado" class="text-gray-900 font-medium text-base md:text-xl">Estado</label>
+                                    <input
+                                        type="text"
+                                        id="endereco-estado"
+                                        name="estado"
+                                        data-address="estado"
+                                        autocomplete="address-level1"
+                                        placeholder="UF"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 uppercase placeholder:text-gray-500 placeholder:normal-case focus:outline-none focus:border-green-500 transition-colors"
+                                        required
+                                        minlength="2"
+                                        maxlength="2"
+                                        pattern="[A-Za-z]{2}"
+                                        title="Informe a sigla do estado com 2 letras. Ex: SP"
+                                        value="<%= enderecoInicial.estado || '' %>"
+                                    />
+                                </div>
+
+                                <div class="flex flex-col gap-2 sm:col-span-12">
+                                    <label for="endereco-complemento" class="text-gray-900 font-medium text-base md:text-xl">
+                                        Complemento <span class="text-sm md:text-base text-gray-500 font-normal">(opcional)</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="endereco-complemento"
+                                        name="complemento"
+                                        data-address="complemento"
+                                        placeholder="Ex: apto 12, na frente da pracinha"
+                                        class="w-full px-[15px] py-3 md:py-4 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                        maxlength="40"
+                                        value="<%= enderecoInicial.complemento || '' %>"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="flex flex-col gap-8 md:gap-[50px]">
+                        <legend
+                            class="text-green-500 font-semibold text-2xl md:text-[32px] md:leading-[40px] mb-6 w-full"
+                        >
+                            Dados do pet
+                        </legend>
+
+                        <div class="flex flex-col gap-8 md:gap-[30px]">
+                            <div class="flex flex-col gap-[15px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                                    <label
+                                        for="nomePet"
+                                        class="text-gray-900 font-medium text-xl md:text-[26px] md:leading-[32px]"
+                                    >Nome do pet</label
+                                    >
+                                    <% if (pet) { %>
+                                        <span class="text-xs md:text-sm text-gray-500 font-normal">
+                                            Escolha um pet cadastrado ou digite outro
+                                        </span>
+                                    <% } %>
+                                </div>
+
+                                <% if (pet) { 
+                                    const nomePet = pet.nome || '';
+                                    const iconePet = pet.genero === 'femea' ? '🎀' : '🐾';
+                                %>
+                                    <div class="flex flex-col gap-2">
+                                        <span class="text-sm font-semibold text-gray-700">Selecione um dos seus pets:</span>
+                                        <div class="flex flex-wrap gap-2.5" id="container-botoes-pet">
+                                            <button
+                                                type="button"
+                                                class="btn-escolha-pet flex items-center gap-2 px-3.5 py-2 rounded-lg border text-sm md:text-base font-medium transition-all duration-200 cursor-pointer bg-green-600 text-white border-green-600 shadow-sm"
+                                                data-pet-id="<%= pet.id || '' %>"
+                                                data-pet-nome="<%= nomePet %>"
+                                                data-pet-raca="<%= pet.raca || '' %>"
+                                                data-pet-genero="<%= pet.genero || '' %>"
+                                                data-index="0"
+                                            >
+                                                <span><%= iconePet %></span>
+                                                <span class="font-semibold">Pet 1: <%= nomePet %></span>
+                                                <% if (pet.raca) { %>
+                                                    <span class="text-xs opacity-80">(<%= pet.raca %>)</span>
+                                                <% } %>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                id="btn-outro-pet"
+                                                class="btn-escolha-pet flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-dashed border-gray-400 bg-white text-gray-600 hover:border-green-600 hover:text-green-700 hover:bg-green-50 text-sm md:text-base font-medium transition-all duration-200 cursor-pointer"
+                                            >
+                                                <span> + Outro pet</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <% } %>
+
+                                <input
+                                    type="hidden"
+                                    id="petId"
+                                    name="petId"
+                                    value="<%= pet ? (pet.id || '') : '' %>"
+                                />
+
+                                <input
+                                    type="text"
+                                    id="nomePet"
+                                    name="nomePet"
+                                    placeholder="Nome do seu pet"
+                                    class="w-full px-[15px] py-3 md:py-5 border-b-[2px] border-green-700 bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                                    required
+                                    minlength="2"
+                                    maxlength="40"
+                                    value="<%= pet ? (pet.nome || '') : '' %>"
+                                />
+                            </div>
+
+                            <!-- Descrição Serviço -->
+                            <div class="flex flex-col gap-[15px]">
+                                <label
+                                    for="descricao"
+                                    class="text-gray-900 font-medium text-xl md:text-[26px] md:leading-[32px]"
+                                >Descrição do serviço</label
+                                >
+                                <textarea
+                                    id="descricao"
+                                    name="descricao"
+                                    placeholder="Descreva alguma especificação sobre o serviço, como qual vacina deseja fazer em seu pet..."
+                                    class="w-full px-[15px] py-4 md:py-5 border-[3px] border-green-700 rounded-[10px] bg-transparent text-lg md:text-[22px] text-gray-900 placeholder:text-gray-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 resize-none h-[140px] transition-colors"
+                                    maxlength="200"
+                                ></textarea>
+                            </div>
+
+                            <div
+                                class="flex flex-row items-center gap-[10px] mt-2 w-fit"
+                            >
+                                <input
+                                    type="checkbox"
+                                    id="buscarResidencia"
+                                    name="buscarResidencia"
+                                    class="w-6 h-6 border-[2px] border-green-500 rounded-[6px] accent-green-500 cursor-pointer focus:ring-2 focus:ring-green-500 focus:ring-offset-2 bg-transparent"
+                                />
+                                <label
+                                    for="buscarResidencia"
+                                    class="text-gray-900 font-medium text-lg md:text-[22px] cursor-pointer select-none hover:text-green-500 transition-colors"
+                                >Buscar em residência?</label
+                                >
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full rounded-[10px] bg-green-600 px-8 py-4 flex items-center justify-center hover:bg-green-500 transition-colors outline-none focus:ring-4 focus:ring-green-600 mx-auto"
+                >
+                    <span
+                        class="font-semibold text-[22px] leading-[28px] text-gray-50 xs:text-[24px] xs:leading-[30px] sm:text-[26px] sm:leading-[33px] lg:text-[30px] lg:leading-[37px]"
+                        >Finalizar Agendamento</span
+                    >
+                </button>
+            </form>
+        </section>
+
+        <figure class="order-2 lg:order-1 flex-1 w-full relative min-h-[300px] lg:min-h-0">
+            <img
+                src="/images/forms-images/login.jpg"
+                alt="Dados do Agendamento"
+                class="lg:absolute lg:inset-0 w-full h-full object-cover"
+            />
+        </figure>
+    </main>
+
+    <aside
+        data-modal-info-menu="user"
+        data-modal-info="formSchedule"
+        class="hidden z-[1000] animate-fadeItem opacity-0 fixed bottom-8 left-1/2 -translate-x-1/2 p-4 text-center font-semibold text-lg"
+    ></aside>
+
+<%- include('layouts/footer', { scripts: [
+    { src: '/javascript/menu-user/script-menu-user.js', module: true },
+    { src: '/javascript/forms/agendamento-service/script-agendamento-form.js', module: true }    
+] }) %>
